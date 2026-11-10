@@ -123,13 +123,8 @@
     void *(**On*Event);
     void *(**On*Listener);
 }
-#xwalk
--keep class org.xwalk.core.** { *; }
--keep class org.crosswalk.engine.** { *; }
--keep class org.chromium.** { *; }
 -dontwarn android.view.**
 -dontwarn android.media.**
--dontwarn org.chromium.**
 #okhttp
 -dontwarn okhttp3.**
 -keep class okhttp3.**{*;}
@@ -155,6 +150,13 @@
 -keepclassmembers,allowobfuscation class * {
   @com.google.gson.annotations.SerializedName <fields>;
 }
+# R8 全模式会丢掉匿名 TypeToken 子类的泛型父类签名,导致 "Missing type parameter",
+# 历史/收藏/配置解析全部返回空,必须保留 TypeToken 子类的泛型信息
+-keep,allowobfuscation,allowshrinking class com.google.gson.reflect.TypeToken
+-keep,allowobfuscation,allowshrinking class * extends com.google.gson.reflect.TypeToken
+# LocalPlayActivity 用的是 guava 的 TypeToken,同样问题
+-keep,allowobfuscation,allowshrinking class com.google.common.reflect.TypeToken
+-keep,allowobfuscation,allowshrinking class * extends com.google.common.reflect.TypeToken
 #xstream
 -keep class com.thoughtworks.xstream.converters.extended.SubjectConverter { *; }
 -keep class com.thoughtworks.xstream.converters.extended.ThrowableConverter { *; }
@@ -172,11 +174,6 @@
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
-#bugly
--dontwarn com.tencent.bugly.**
--keep public class com.tencent.bugly.**{*;}
--keep class android.support.**{*;}
-
 #dkplayer
 -keep class com.dueeeke.videoplayer.** { *; }
 -dontwarn com.dueeeke.videoplayer.**
@@ -199,9 +196,14 @@
     <methods>;
 }
 
--keep class com.github.catvod.crawler.*{*;}
-# 迅雷下载模块
--keep class com.xunlei.downloadlib.** {*;}
+-keep class com.github.catvod.** { *; }
+# 远程jar/JS爬虫按类名反射调用 app 桥接类,类名方法名均不可混淆
+-keep class com.github.tvbox.osc.api.** { *; }
+-keep class com.github.tvbox.osc.callback.** { *; }
+-keep class com.github.tvbox.osc.subtitle.** { *; }
+-keep class com.github.tvbox.osc.player.thirdparty.** { *; }
+-keep class com.github.tvbox.osc.util.RomUtils { *; }
+-keep class com.github.tvbox.osc.util.DefaultConfig { *; }
 # quickjs引擎
 -keep class com.github.tvbox.quickjs.** {*;}
 -keep class com.whl.quickjs.** {*;}
@@ -230,3 +232,82 @@
   public static * bind(android.view.View);
 }
 
+
+# R8: xstream可选驱动/conscrypt平台适配等可选项,统一抑制
+-dontwarn com.android.org.conscrypt.SSLParametersImpl
+-dontwarn com.bea.xml.stream.MXParserFactory
+-dontwarn com.bea.xml.stream.XMLOutputFactoryBase
+-dontwarn com.ctc.wstx.stax.WstxInputFactory
+-dontwarn com.ctc.wstx.stax.WstxOutputFactory
+-dontwarn java.awt.Color
+-dontwarn java.awt.Font
+-dontwarn java.beans.BeanInfo
+-dontwarn java.beans.IntrospectionException
+-dontwarn java.beans.Introspector
+-dontwarn java.beans.PropertyDescriptor
+-dontwarn java.beans.PropertyEditor
+-dontwarn javax.activation.ActivationDataFlavor
+-dontwarn javax.swing.plaf.FontUIResource
+-dontwarn javax.xml.bind.DatatypeConverter
+-dontwarn javax.xml.stream.Location
+-dontwarn javax.xml.stream.XMLInputFactory
+-dontwarn javax.xml.stream.XMLOutputFactory
+-dontwarn javax.xml.stream.XMLStreamException
+-dontwarn javax.xml.stream.XMLStreamReader
+-dontwarn javax.xml.stream.XMLStreamWriter
+-dontwarn net.sf.cglib.proxy.Callback
+-dontwarn net.sf.cglib.proxy.CallbackFilter
+-dontwarn net.sf.cglib.proxy.Enhancer
+-dontwarn net.sf.cglib.proxy.Factory
+-dontwarn net.sf.cglib.proxy.NoOp
+-dontwarn net.sf.cglib.proxy.Proxy
+-dontwarn nu.xom.Attribute
+-dontwarn nu.xom.Builder
+-dontwarn nu.xom.Document
+-dontwarn nu.xom.Element
+-dontwarn nu.xom.Elements
+-dontwarn nu.xom.Node
+-dontwarn nu.xom.ParentNode
+-dontwarn nu.xom.ParsingException
+-dontwarn nu.xom.Text
+-dontwarn nu.xom.ValidityException
+-dontwarn org.apache.harmony.xnet.provider.jsse.SSLParametersImpl
+-dontwarn org.codehaus.jettison.AbstractXMLStreamWriter
+-dontwarn org.codehaus.jettison.mapped.Configuration
+-dontwarn org.codehaus.jettison.mapped.MappedNamespaceConvention
+-dontwarn org.codehaus.jettison.mapped.MappedXMLInputFactory
+-dontwarn org.codehaus.jettison.mapped.MappedXMLOutputFactory
+-dontwarn org.dom4j.Attribute
+-dontwarn org.dom4j.Branch
+-dontwarn org.dom4j.Document
+-dontwarn org.dom4j.DocumentException
+-dontwarn org.dom4j.DocumentFactory
+-dontwarn org.dom4j.Element
+-dontwarn org.dom4j.io.OutputFormat
+-dontwarn org.dom4j.io.SAXReader
+-dontwarn org.dom4j.io.XMLWriter
+-dontwarn org.dom4j.tree.DefaultElement
+-dontwarn org.jdom.Attribute
+-dontwarn org.jdom.Content
+-dontwarn org.jdom.DefaultJDOMFactory
+-dontwarn org.jdom.Document
+-dontwarn org.jdom.Element
+-dontwarn org.jdom.JDOMException
+-dontwarn org.jdom.JDOMFactory
+-dontwarn org.jdom.Text
+-dontwarn org.jdom.input.SAXBuilder
+-dontwarn org.jdom2.Attribute
+-dontwarn org.jdom2.Content
+-dontwarn org.jdom2.DefaultJDOMFactory
+-dontwarn org.jdom2.Document
+-dontwarn org.jdom2.Element
+-dontwarn org.jdom2.JDOMException
+-dontwarn org.jdom2.JDOMFactory
+-dontwarn org.jdom2.Text
+-dontwarn org.jdom2.input.SAXBuilder
+-dontwarn org.joda.time.DateTime
+-dontwarn org.joda.time.DateTimeZone
+-dontwarn org.joda.time.format.DateTimeFormatter
+-dontwarn org.joda.time.format.ISODateTimeFormat
+-dontwarn org.kxml2.io.KXmlParser
+-dontwarn org.xmlpull.mxp1.MXParser

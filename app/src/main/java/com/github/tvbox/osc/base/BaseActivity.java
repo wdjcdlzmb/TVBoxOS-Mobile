@@ -12,10 +12,12 @@ import android.view.Window;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.PermissionChecker;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.ResourceUtils;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.callback.EmptyCallback;
 import com.github.tvbox.osc.callback.LoadingCallback;
@@ -23,8 +25,8 @@ import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.ui.activity.DetailActivity;
 import com.github.tvbox.osc.util.AppManager;
 import com.github.tvbox.osc.util.HawkConfig;
+import com.github.tvbox.osc.util.InsetsUtils;
 import com.github.tvbox.osc.util.Utils;
-import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 import com.kingja.loadsir.callback.Callback;
@@ -48,7 +50,6 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
     protected Context mContext;
     private LoadService mLoadService;
 
-    private ImmersionBar mImmersionBar;
     private TitleBar mTitleBar;
     private LoadingPopupView loadingPopup;
 
@@ -79,16 +80,26 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
 
 
     private void initStatusBar(){
-        ImmersionBar.with(this)
-                .statusBarDarkFont(!Utils.isDarkTheme())
-                .titleBar(findTitleBar(getWindow().getDecorView().findViewById(android.R.id.content)))
-                .navigationBarColor(R.color.white)
-                .init();
+        InsetsUtils.enable(getWindow(), !Utils.isDarkTheme());
+        View content = findViewById(android.R.id.content);
+        TitleBar titleBar = getTitleBar();
+        if (titleBar != null) {
+            InsetsUtils.applyTopInset(titleBar);
+            InsetsUtils.applyBottomInset(content);
+        } else {
+            InsetsUtils.applyTopAndBottomInset(content);
+        }
     }
 
     private void initTitleBar(){
-        if (getTitleBar() != null) {
-            getTitleBar().setOnTitleBarListener(this);
+        TitleBar titleBar = getTitleBar();
+        if (titleBar != null) {
+            titleBar.setOnTitleBarListener(this);
+            // hjq TitleBar 默认白底黑字,不随 DayNight,统一注入语义色
+            titleBar.setBackgroundColor(ContextCompat.getColor(this, R.color.windowBackground));
+            titleBar.setTitleColor(ContextCompat.getColor(this, R.color.text_foreground));
+            titleBar.setLineColor(ContextCompat.getColor(this, R.color.light_gray_color));
+            titleBar.setLeftIconTint(ContextCompat.getColor(this, R.color.text_foreground));
         }
     }
 

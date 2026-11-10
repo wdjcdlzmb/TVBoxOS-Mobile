@@ -6,6 +6,8 @@
     <color name="colorPrimary">#567df4</color>
     <!--CheckBox,RadioButton,SwitchCompat等一般控件的选中效果默认采用该颜色-->
     <color name="colorAccent">#3e4fb1</color>
+    <color name="colorPrimaryContainer">#DCE4FF</color>
+    <color name="colorOnPrimaryContainer">#0A1C40</color>
     <!--    默认window窗口(activity)背景颜色-->
     <color name="windowBackground">#fff</color>
 
@@ -30,8 +32,6 @@
     <color name="bg_popup">#FFFFFF</color>
 
     <!--    制定颜色-->
-    <!--    页面背景色,activity.fragment等-->
-    <color name="bg_page">#000000</color>
     <!--    不可用灰色颜色-->
     <color name="disable_gray">#cccccc</color>
 

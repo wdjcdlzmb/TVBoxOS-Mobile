@@ -30,7 +30,11 @@ import me.jessyan.autosize.utils.AutoSizeUtils;
  */
 public class HistoryAdapter extends BaseQuickAdapter<VodInfo, BaseViewHolder> {
     public HistoryAdapter() {
-        super(R.layout.item_grid, new ArrayList<>());
+        this(R.layout.item_grid);
+    }
+
+    public HistoryAdapter(int layoutResId) {
+        super(layoutResId, new ArrayList<>());
     }
 
     @Override
@@ -42,7 +46,8 @@ public class HistoryAdapter extends BaseQuickAdapter<VodInfo, BaseViewHolder> {
             tvYear.setText(String.valueOf(item.year));
             tvYear.setVisibility(View.VISIBLE);
         }*/
-        tvYear.setText(ApiConfig.get().getSource(item.sourceKey).getName());
+        com.github.tvbox.osc.bean.SourceBean source = ApiConfig.get().getSource(item.sourceKey);
+        tvYear.setText(source != null ? source.getName() : item.sourceKey);
 
         TextView tvNote = helper.getView(R.id.tvNote);
         if (item.note == null || item.note.isEmpty()) {

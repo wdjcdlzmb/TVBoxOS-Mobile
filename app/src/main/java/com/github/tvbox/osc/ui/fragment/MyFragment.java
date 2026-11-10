@@ -2,14 +2,21 @@ package com.github.tvbox.osc.ui.fragment;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.ClipboardUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.base.BaseLazyFragment;
 import com.github.tvbox.osc.base.BaseVbFragment;
+import com.github.tvbox.osc.bean.VodInfo;
+import com.github.tvbox.osc.cache.RoomDataManger;
 import com.github.tvbox.osc.databinding.FragmentMyBinding;
 import com.github.tvbox.osc.ui.activity.CollectActivity;
 import com.github.tvbox.osc.ui.activity.DetailActivity;
@@ -19,6 +26,7 @@ import com.github.tvbox.osc.ui.activity.LocalPlayActivity;
 import com.github.tvbox.osc.ui.activity.MovieFoldersActivity;
 import com.github.tvbox.osc.ui.activity.SettingActivity;
 import com.github.tvbox.osc.ui.activity.SubscriptionActivity;
+import com.github.tvbox.osc.ui.adapter.HistoryAdapter;
 import com.github.tvbox.osc.ui.dialog.AboutDialog;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.Utils;
@@ -28,6 +36,7 @@ import com.hjq.permissions.XXPermissions;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnInputConfirmListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,10 +47,23 @@ import java.util.List;
  */
 public class MyFragment extends BaseVbFragment<FragmentMyBinding> {
 
+    private HistoryAdapter continueAdapter;
 
     @Override
     protected void init() {
         mBinding.tvVersion.setText("v"+ AppUtils.getAppVersionName());
+
+        mBinding.rvContinueWatching.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+        continueAdapter = new HistoryAdapter(R.layout.item_continue_watching);
+        mBinding.rvContinueWatching.setAdapter(continueAdapter);
+        continueAdapter.setOnItemClickListener((adapter, view, position) -> {
+            FastClickCheckUtil.check(view);
+            VodInfo vodInfo = continueAdapter.getData().get(position);
+            Bundle bundle = new Bundle();
+            bundle.putString("id", vodInfo.id);
+            bundle.putString("sourceKey", vodInfo.sourceKey);
+            jumpActivity(DetailActivity.class, bundle);
+        });
 
         mBinding.addrPlay.setOnClickListener(v ->{
             new XPopup.Builder(getContext())
@@ -81,6 +103,34 @@ public class MyFragment extends BaseVbFragment<FragmentMyBinding> {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (continueAdapter != null) {
+            loadContinueWatching();
+        }
+    }
+
+    private void loadContinueWatching() {
+        new Thread(() -> {
+            List<VodInfo> records = RoomDataManger.getAllVodRecord(20);
+            List<VodInfo> list = new ArrayList<>();
+            for (VodInfo vodInfo : records) {
+                if (vodInfo.playNote != null && !vodInfo.playNote.isEmpty()) {
+                    vodInfo.note = vodInfo.playNote;
+                }
+                list.add(vodInfo);
+            }
+            if (mActivity == null) return;
+            mActivity.runOnUiThread(() -> {
+                continueAdapter.setNewData(list);
+                int visibility = list.isEmpty() ? View.GONE : View.VISIBLE;
+                mBinding.tvContinueHeader.setVisibility(visibility);
+                mBinding.rvContinueWatching.setVisibility(visibility);
+            });
+        }).start();
+    }
+
     private void showPermissionTipPopup(){
         new XPopup.Builder(mActivity)
                 .isDarkTheme(Utils.isDarkTheme())
@@ -117,7 +167,7 @@ public class MyFragment extends BaseVbFragment<FragmentMyBinding> {
     }
 
     private boolean isPush(String text) {
-        return !TextUtils.isEmpty(text) && Arrays.asList("smb", "http", "https", "thunder", "magnet", "ed2k", "mitv", "jianpian").contains(Uri.parse(text).getScheme());
+        return !TextUtils.isEmpty(text) && Arrays.asList("smb", "http", "https", "mitv").contains(Uri.parse(text).getScheme());
     }
 
 }

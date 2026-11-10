@@ -832,38 +832,6 @@ public class VodController extends BaseController {
         }
     }
 
-    private boolean simSlideStart = false;
-    private int simSeekPosition = 0;
-    private long simSlideOffset = 0;
-
-    public void tvSlideStop() {
-        if (!simSlideStart)
-            return;
-        mControlWrapper.seekTo(simSeekPosition);
-        if (!mControlWrapper.isPlaying())
-            mControlWrapper.start();
-        simSlideStart = false;
-        simSeekPosition = 0;
-        simSlideOffset = 0;
-    }
-
-    public void tvSlideStart(int dir) {
-        int duration = (int) mControlWrapper.getDuration();
-        if (duration <= 0)
-            return;
-        if (!simSlideStart) {
-            simSlideStart = true;
-        }
-        // 每次10秒
-        simSlideOffset += (10000.0f * dir);
-        int currentPosition = (int) mControlWrapper.getCurrentPosition();
-        int position = (int) (simSlideOffset + currentPosition);
-        if (position > duration) position = duration;
-        if (position < 0) position = 0;
-        updateSeekUI(currentPosition, position, duration);
-        simSeekPosition = position;
-    }
-
     @Override
     protected void updateSeekUI(int curr, int seekTo, int duration) {
         super.updateSeekUI(curr, seekTo, duration);
@@ -945,28 +913,9 @@ public class VodController extends BaseController {
         }
         boolean isInPlayback = isInPlaybackState();
         if (action == KeyEvent.ACTION_DOWN) {
-            if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT || keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-                if (isInPlayback) {
-                    tvSlideStart(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT ? 1 : -1);
-                    return true;
-                }
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
+            if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
                 if (isInPlayback) {
                     togglePlay();
-                    return true;
-                }
-//            } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {  return true;// 闲置开启计时关闭透明底栏
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN || keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_MENU) {
-                if (!isBottomVisible()) {
-                    showBottom();
-                    myHandle.postDelayed(myRunnable, dismissTimeOperationBar);
-                    return true;
-                }
-            }
-        } else if (action == KeyEvent.ACTION_UP) {
-            if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT || keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-                if (isInPlayback) {
-                    tvSlideStop();
                     return true;
                 }
             }

@@ -1,77 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.lihang.ShadowLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="140dp"
-    android:layout_margin="3dp"
-    app:hl_cornerRadius="14dp"
-    >
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/windowBackground"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="2dp">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/ivThumb"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="2:3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:src="@drawable/img_loading_placeholder" />
 
-        <com.lihang.ShadowLayout
+        <TextView
+            android:id="@+id/tvYear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:hl_layoutBackground="@color/orange"
-            app:hl_cornerRadius_rightBottom="8dp">
-            <TextView
-                android:id="@+id/tvYear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="70dp"
-                android:ellipsize="end"
-                android:padding="5dp"
-                android:singleLine="true"
-                tools:text="1970"
-                android:textColor="@color/white"
-                android:textSize="10dp" />
-        </com.lihang.ShadowLayout>
+            android:layout_margin="6dp"
+            android:background="@drawable/shape_thumb_year"
+            android:ellipsize="end"
+            android:maxWidth="70dp"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="2dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="@id/ivThumb"
+            app:layout_constraintEnd_toStartOf="@id/tvNote"
+            app:layout_constraintTop_toTopOf="@id/ivThumb"
+            tools:text="1970" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvNote"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="vertical"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="6dp"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/bg_gradient_black_b2t">
+            android:layout_margin="6dp"
+            android:background="@drawable/shape_thumb_note"
+            android:ellipsize="end"
+            android:maxWidth="110dp"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="2dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="@id/ivThumb"
+            app:layout_constraintStart_toEndOf="@id/tvYear"
+            app:layout_constraintTop_toTopOf="@id/ivThumb"
+            tools:text="更新至10集" />
 
-            <TextView
-                android:id="@+id/tvNote"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                tools:text="更新至10集"
-                android:textSize="12sp"
-                android:drawablePadding="4dp"
-                />
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="2"
+            android:minLines="1"
+            android:paddingHorizontal="6dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/text_foreground"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivThumb"
+            tools:text="爱上大大的" />
 
-            <TextView
-                android:id="@+id/tvName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="marquee"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:layout_marginTop="4dp"
-                android:textColor="@color/white"
-                tools:text="爱上大大"
-                android:singleLine="true"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
-    </RelativeLayout>
-
-</com.lihang.ShadowLayout>
+</com.google.android.material.card.MaterialCardView>

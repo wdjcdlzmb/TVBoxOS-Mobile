@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Base64;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -54,10 +53,9 @@ import com.github.tvbox.osc.ui.widget.PlayerMenuView;
 import com.github.tvbox.osc.ui.widget.PlayerTitleView;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.HawkConfig;
+import com.github.tvbox.osc.util.InsetsUtils;
 import com.github.tvbox.osc.util.live.TxtSubscribe;
 import com.google.gson.JsonArray;
-import com.gyf.immersionbar.BarHide;
-import com.gyf.immersionbar.ImmersionBar;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.enums.PopupPosition;
@@ -147,13 +145,10 @@ public class LiveActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        ImmersionBar.with(this)
-                .statusBarColor(R.color.black)
-                .statusBarDarkFont(false)
-                .navigationBarColor(R.color.black)
-                .fitsSystemWindows(true)
-                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
-                .init();
+        InsetsUtils.enable(getWindow(), false);
+        InsetsUtils.applyTopInset(findViewById(android.R.id.content));
+        androidx.core.view.WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView())
+                .hide(androidx.core.view.WindowInsetsCompat.Type.navigationBars());
         context = this;
         epgStringAddress = Hawk.get(HawkConfig.EPG_URL,"");
         if(epgStringAddress == null || epgStringAddress.length()<5)
@@ -243,52 +238,6 @@ public class LiveActivity extends BaseActivity {
         } else if (!mVideoView.onBackPressed()) {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            int keyCode = event.getKeyCode();
-            if (keyCode == KeyEvent.KEYCODE_MENU) {
-                //showSettingGroup();
-            } else if (!isListOrSettingLayoutVisible()) {
-                switch (keyCode) {
-                    case KeyEvent.KEYCODE_DPAD_UP:
-                        if (Hawk.get(HawkConfig.LIVE_CHANNEL_REVERSE, false))
-                            playNext();
-                        else
-                            playPrevious();
-                        break;
-                    case KeyEvent.KEYCODE_DPAD_DOWN:
-                        if (Hawk.get(HawkConfig.LIVE_CHANNEL_REVERSE, false))
-                            playPrevious();
-                        else
-                            playNext();
-                        break;
-                    case KeyEvent.KEYCODE_DPAD_LEFT:
-                        if(isBack){
-
-                        }else{
-                            //showSettingGroup();
-                        }
-                        break;
-                    case KeyEvent.KEYCODE_DPAD_RIGHT:
-                        if(isBack){
-
-                        }else{
-                            playNextSource();
-                        }
-                        break;
-                    case KeyEvent.KEYCODE_DPAD_CENTER:
-                    case KeyEvent.KEYCODE_ENTER:
-                    case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                        showChannelList();
-                        break;
-                }
-            }
-        } else if (event.getAction() == KeyEvent.ACTION_UP) {
-        }
-        return super.dispatchKeyEvent(event);
     }
 
     @Override
@@ -542,6 +491,16 @@ public class LiveActivity extends BaseActivity {
                     playNextSource();
                 } else {
                     playPreSource();
+                }
+            }
+
+            @Override
+            public void changeChannel(int direction) {
+                boolean reverse = Hawk.get(HawkConfig.LIVE_CHANNEL_REVERSE, false);
+                if (direction > 0) {
+                    if (reverse) playPrevious(); else playNext();
+                } else {
+                    if (reverse) playNext(); else playPrevious();
                 }
             }
         });

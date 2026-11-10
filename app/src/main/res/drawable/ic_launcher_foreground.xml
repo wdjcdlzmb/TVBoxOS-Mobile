@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- 屏幕外框(安全区内) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M34,38h40a4,4 0 0 1 4,4v20a4,4 0 0 1 -4,4h-40a4,4 0 0 1 -4,-4v-20a4,4 0 0 1 4,-4zM38,44v16h32v-16z" />
+    <!-- 播放三角 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M50,48l12,6l-12,6z" />
+    <!-- 底座 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M46,70h16v3h-16z" />
+</vector>

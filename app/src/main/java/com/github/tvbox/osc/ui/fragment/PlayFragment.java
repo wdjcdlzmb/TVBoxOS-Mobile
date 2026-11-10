@@ -76,13 +76,11 @@ import com.github.tvbox.osc.util.LOG;
 import com.github.tvbox.osc.util.MD5;
 import com.github.tvbox.osc.util.PlayerHelper;
 import com.github.tvbox.osc.util.VideoParseRuler;
-import com.github.tvbox.osc.util.thunder.Jianpian;
-import com.github.tvbox.osc.util.thunder.Thunder;
+import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.text.Cue;
-import com.gyf.immersionbar.BarHide;
-import com.gyf.immersionbar.ImmersionBar;
+import com.github.tvbox.osc.util.InsetsUtils;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.enums.PopupPosition;
@@ -93,7 +91,7 @@ import com.lzy.okgo.model.Response;
 import com.obsez.android.lib.filechooser.ChooserDialog;
 import com.orhanobut.hawk.Hawk;
 
-import org.apache.commons.lang3.StringUtils;
+import com.github.tvbox.osc.util.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -209,6 +207,8 @@ public class PlayFragment extends BaseLazyFragment {
             }
         });
         mVideoView = findViewById(R.id.mVideoView);
+        // 来电/其他应用出声时自动暂停
+        mVideoView.setEnableAudioFocus(true);
         mPlayLoadTip = findViewById(R.id.play_load_tip);
         mPlayLoading = findViewById(R.id.play_loading);
         mPlayLoadErr = findViewById(R.id.play_load_error);
@@ -310,9 +310,7 @@ public class PlayFragment extends BaseLazyFragment {
             @Override
             public void onHideBottom() {
                 if (mFullWindows){
-                    ImmersionBar.with(activity)
-                            .hideBar(BarHide.FLAG_HIDE_BAR)
-                            .init();
+                    InsetsUtils.setImmersive(activity.getWindow(), true);
                 }
             }
 
@@ -375,19 +373,11 @@ public class PlayFragment extends BaseLazyFragment {
                 mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
             }
 
-            ImmersionBar.with(mActivity)
-                    .hideBar(BarHide.FLAG_HIDE_BAR)
-                    .navigationBarColor(R.color.black)//即使隐藏部分时候还是会显示
-                    .fitsSystemWindows(false)
-                    .init();
+            InsetsUtils.setImmersive(mActivity.getWindow(), true);
         }else {//非全屏统一设置竖屏,activity处理为小的预览尺寸
             mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-            ImmersionBar.with(mActivity)
-                    .hideBar(BarHide.FLAG_SHOW_BAR)
-                    .navigationBarColor(R.color.white)
-                    .fitsSystemWindows(true)
-                    .init();
+            InsetsUtils.setImmersive(mActivity.getWindow(), false);
         }
 
         mController.changedLandscape(fullWindows);
@@ -748,7 +738,7 @@ public class PlayFragment extends BaseLazyFragment {
                 lines[i] = "";
             }
         }
-        return StringUtils.join(lines, linesplit);
+        return StringUtils.arrayToString(lines, 0, linesplit);
     }
 
     void playUrl(String url, HashMap<String, String> headers) {
@@ -1155,8 +1145,6 @@ public class PlayFragment extends BaseLazyFragment {
         }
         stopLoadWebView(true);
         stopParse();
-        Thunder.stop(true);//停止磁力下载
-        Jianpian.finish();//停止p2p下载
     }
 
     private VodInfo mVodInfo;
@@ -1243,40 +1231,7 @@ public class PlayFragment extends BaseLazyFragment {
             CacheManager.delete(MD5.string2MD5(progressKey), 0);
             CacheManager.delete(MD5.string2MD5(subtitleCacheKey), 0);
         }
-        if (Jianpian.isJpUrl(vs.url)) {//荐片地址特殊判断
-            String jp_url = vs.url;
-            mController.showParse(false);
-            if (vs.url.startsWith("tvbox-xg:")) {
-                playUrl(Jianpian.JPUrlDec(jp_url.substring(9)), null);
-            } else {
-                playUrl(Jianpian.JPUrlDec(jp_url), null);
-            }
-            return;
-        }
-        if (Thunder.play(vs.url, new Thunder.ThunderCallback() {
-            @Override
-            public void status(int code, String info) {
-                if (code < 0) {
-                    setTip(info, false, true);
-                } else {
-                    setTip(info, true, false);
-                }
-            }
-
-            @Override
-            public void list(Map<Integer, String> urlMap) {
-            }
-
-            @Override
-            public void play(String url) {
-                playUrl(url, null);
-            }
-        })) {
-            mController.showParse(false);
-            return;
-        }
-        sourceViewModel.getPlay(sourceKey, mVodInfo.playFlag, progressKey, vs.url, subtitleCacheKey);
-    }
+        sourceViewModel.getPlay(sourceKey, mVodInfo.playFlag, progressKey, vs.url, subtitleCacheKey);    }
 
     private String playSubtitle;
     private String subtitleCacheKey;

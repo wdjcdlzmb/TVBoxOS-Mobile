@@ -1,32 +1,41 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <!--应用的主要色调,actionBar默认使用该颜色,Toolbar导航栏的底色-->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <!--CheckBox,RadioButton,SwitchCompat等一般控件的选中效果默认采用该颜色-->
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/colorPrimaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/colorOnPrimaryContainer</item>
+        <item name="colorSecondary">@color/colorAccent</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <!--默认window窗口(activity)背景颜色,根据主题修改该属性可 避免某些情况activity跳转/回跳会白屏(出现与主题相反的颜色)-->
+        <!--全局表面色:窗口/卡片/弹层-->
         <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="colorSurface">@color/windowBackground</item>
+        <item name="colorSurfaceContainerHighest">@color/bg_popup</item>
+        <item name="colorOnSurface">@color/text_foreground</item>
+        <item name="colorOnSurfaceVariant">@color/text_sub_foreground</item>
+        <!--禁止系统强制反色,主题自身已是 DayNight-->
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        <!--统一页面转场动画-->
+        <item name="android:windowAnimationStyle">@style/AppWindowAnimation</item>
     </style>
 
-    <style name="SplashTheme" parent="AppTheme">
-        <item name="android:windowBackground">@drawable/bg_splash</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+    <style name="AppWindowAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_close_exit</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>//全屏即无通知栏
-        <item name="android:windowContentOverlay">@null</item>//是否有遮盖
-        <item name="windowNoTitle">true</item>
-        <item name="android:keepScreenOn">true</item>
-        <!--        <item name="android:windowBackground">@drawable/main_bg</item>-->
-        <item name="android:windowBackground">@android:color/transparent</item>
+    <!-- 启动页:使用 Android 12 SplashScreen API -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/windowBackground</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenAnimationDuration">300</item>
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
     </style>
+
     <!-- 自定义dialog样式 -->
     <style name="CustomDialogStyle" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>

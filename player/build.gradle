@@ -3,11 +3,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    namespace 'com.github.tvbox.osc.player'
+    compileSdk 35
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
     }

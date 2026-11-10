@@ -2,14 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
-    compileSdkVersion 33
+    namespace 'com.github.tvbox.osc'
+    compileSdk 35
 
     defaultConfig {
         applicationId 'com.github.tvbox.osc'
         minSdkVersion 24
-        targetSdkVersion 30
-        versionCode 31
-        versionName '1.1.1'
+        targetSdkVersion 35
+        versionCode 32
+        versionName '1.2.0'
+        resConfigs 'zh', 'en'
         multiDexEnabled true
         //设置room的Schema的位置
         javaCompileOptions {
@@ -58,7 +60,9 @@ android {
 
         release {
             signingConfig signingConfigs.config
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -66,16 +70,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
-    }
-    dexOptions {
-        javaMaxHeapSize "4g"
-        additionalParameters += '--multi-dex'
-        additionalParameters += '--set-max-idx-number=48000'
-        additionalParameters += '--minimal-main-dex'
     }
     buildFeatures {
         viewBinding true
@@ -89,22 +90,22 @@ android {
 dependencies {
     api fileTree(dir: "libs", include: ['*.jar', '*.aar'])
 
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'com.google.android.material:material:1.12.0'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
-    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.24"
+    implementation 'androidx.core:core-ktx:1.13.1'
 
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
     implementation 'com.google.zxing:core:3.4.1'
-    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation files('libs/thunder.jar')
-    implementation files('libs/commons-lang3-3.12.0.jar')
     implementation 'org.conscrypt:conscrypt-android:2.5.2'
 
     implementation 'com.squareup.okhttp3:okhttp:3.12.11'
+    implementation 'androidx.media:media:1.6.0'
+    implementation 'androidx.core:core-splashscreen:1.0.1'
     annotationProcessor 'androidx.room:room-compiler:2.3.0'
     implementation 'androidx.room:room-runtime:2.3.0'
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -116,6 +117,8 @@ dependencies {
     implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
     implementation('com.thoughtworks.xstream:xstream:1.4.15') {
         exclude group: 'xmlpull', module: 'xmlpull'
+        // Android framework 自带 XmlPullParser,避免 R8 程序类/框架类冲突
+        exclude group: 'xpp3', module: 'xpp3_min'
     }
     implementation 'org.greenrobot:eventbus:3.2.0'
     implementation 'com.orhanobut:hawk:2.0.1'
@@ -125,7 +128,6 @@ dependencies {
     implementation 'net.sourceforge.streamsupport:android-retrofuture:1.7.4'
 
     implementation 'com.lzy.net:okgo:3.0.4'
-    // implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
     implementation 'com.owen:tv-recyclerview:3.0.0'
 
     implementation 'com.github.getActivity:XXPermissions:13.6'
@@ -134,8 +136,6 @@ dependencies {
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.googlecode.juniversalchardet:juniversalchardet:1.0.3'
 
-    //沉浸式状态栏
-    implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
     //标题栏
     implementation 'com.github.getActivity:TitleBar:10.5'
     //弹窗
@@ -159,10 +159,10 @@ dependencies {
     implementation 'com.airbnb.android:lottie:5.2.0'
     //流式布局
     implementation 'com.hyman:flowlayout-lib:1.1.2'
-    //崩溃
-    implementation project(":crash")
-    //dlna投屏
-    implementation 'com.github.devin1014.DLNA-Cast:dlna-dmc:V1.0.0'
+    //崩溃(正式版库,替代内嵌2.4.0-SNAPSHOT)
+    implementation 'cat.ereza:customactivityoncrash:2.4.0'
+    //dlna投屏(内嵌模块, 原JitPack构建已失效)
+    implementation project(':dlna-dmc')
     // Lifecycles only (without ViewModel or LiveData)
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
 }

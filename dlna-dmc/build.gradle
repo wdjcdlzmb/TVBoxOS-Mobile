@@ -1,0 +1,22 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    namespace 'com.android.cast.dlna.dmc'
+    compileSdk 35
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 30
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    api project(':dlna-core')
+}

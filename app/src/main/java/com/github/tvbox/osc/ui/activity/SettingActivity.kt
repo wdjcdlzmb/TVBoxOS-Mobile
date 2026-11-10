@@ -85,6 +85,14 @@ class SettingActivity : BaseVbActivity<ActivitySettingBinding>() {
                 override fun click(value: String?, pos: Int) {
                     mBinding.tvBackgroundPlayType.text = value
                     Hawk.put(HawkConfig.BACKGROUND_PLAY_TYPE, pos)
+                    // 后台播放(pos==1)依赖前台服务通知,Android 13+ 需运行时申请通知权限
+                    if (pos == 1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                        && !XXPermissions.isGranted(this@SettingActivity, android.Manifest.permission.POST_NOTIFICATIONS)
+                    ) {
+                        XXPermissions.with(this@SettingActivity)
+                            .permission(android.Manifest.permission.POST_NOTIFICATIONS)
+                            .request(null)
+                    }
                 }
 
                 override fun getDisplay(name: String?): String {
@@ -369,9 +377,6 @@ class SettingActivity : BaseVbActivity<ActivitySettingBinding>() {
             XPopup.Builder(this)
                 .isDarkTheme(Utils.isDarkTheme())
                 .asConfirm("提示", "确定清空吗？") { onClickClearCache(view) }.show()
-        }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            mBinding.llTheme.visibility = View.GONE
         }
         val oldTheme = Hawk.get(HawkConfig.THEME_TAG, 0)
         val themes = arrayOf("跟随系统", "浅色", "深色")

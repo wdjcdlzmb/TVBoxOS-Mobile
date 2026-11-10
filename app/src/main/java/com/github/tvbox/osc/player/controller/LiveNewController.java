@@ -39,6 +39,8 @@ public class LiveNewController extends BaseController {
         void playStateChanged(int playState);
 
         void changeSource(int direction);
+
+        void changeChannel(int direction);
     }
 
     private LiveNewController.LiveControlListener listener = null;
@@ -53,14 +55,32 @@ public class LiveNewController extends BaseController {
         listener.playStateChanged(playState);
     }
 
+    /**
+     * 直播:竖向滑动用于换台,禁用父类基于竖向滑动的亮度/音量调节以避免手势冲突
+     */
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return true;
+    }
+
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if (e1.getX() - e2.getX() > minFlingDistance && Math.abs(velocityX) > minFlingVelocity) {
-            listener.changeSource(-1);          //左滑
-        } else if (e2.getX() - e1.getX() > minFlingDistance && Math.abs(velocityX) > minFlingVelocity) {
-            listener.changeSource(1);           //右滑
-        } else if (e1.getY() - e2.getY() > minFlingDistance && Math.abs(velocityY) > minFlingVelocity) {
-        } else if (e2.getY() - e1.getY() > minFlingDistance && Math.abs(velocityY) > minFlingVelocity) {
+        float dx = e2.getX() - e1.getX();
+        float dy = e2.getY() - e1.getY();
+        if (Math.abs(dx) > Math.abs(dy)) {
+            // 横向滑动:切换线路
+            if (dx > minFlingDistance && Math.abs(velocityX) > minFlingVelocity) {
+                listener.changeSource(1);           //右滑
+            } else if (dx < -minFlingDistance && Math.abs(velocityX) > minFlingVelocity) {
+                listener.changeSource(-1);          //左滑
+            }
+        } else {
+            // 竖向滑动:切换频道(上滑下一台,下滑上一台)
+            if (dy < -minFlingDistance && Math.abs(velocityY) > minFlingVelocity) {
+                listener.changeChannel(1);
+            } else if (dy > minFlingDistance && Math.abs(velocityY) > minFlingVelocity) {
+                listener.changeChannel(-1);
+            }
         }
         return false;
     }

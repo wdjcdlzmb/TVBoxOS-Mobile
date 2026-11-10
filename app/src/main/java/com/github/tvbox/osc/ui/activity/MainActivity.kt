@@ -1,25 +1,20 @@
 package com.github.tvbox.osc.ui.activity
 
-import android.os.Process
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener
-import com.blankj.utilcode.util.ActivityUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.github.tvbox.osc.base.BaseVbActivity
 import com.github.tvbox.osc.constant.IntentKey
 import com.github.tvbox.osc.databinding.ActivityMainBinding
 import com.github.tvbox.osc.ui.fragment.GridFragment
 import com.github.tvbox.osc.ui.fragment.HomeFragment
 import com.github.tvbox.osc.ui.fragment.MyFragment
-import kotlin.system.exitProcess
 
 class MainActivity : BaseVbActivity<ActivityMainBinding>() {
 
     var fragments = listOf(HomeFragment(),MyFragment())
     var useCacheConfig = false
-    private var exitTime = 0L
 
     override fun init() {
 
@@ -74,13 +69,7 @@ class MainActivity : BaseVbActivity<ActivityMainBinding>() {
     }
 
     private fun confirmExit() {
-        if (System.currentTimeMillis() - exitTime > 2000) {
-            ToastUtils.showShort("再按一次退出程序")
-            exitTime = System.currentTimeMillis()
-        } else {
-            ActivityUtils.finishAllActivities(true)
-            Process.killProcess(Process.myPid())
-            exitProcess(0)
-        }
+        // 主流行为: 主页返回退到后台而非杀进程,保证后台播放/画中画不被中断
+        moveTaskToBack(true)
     }
 }

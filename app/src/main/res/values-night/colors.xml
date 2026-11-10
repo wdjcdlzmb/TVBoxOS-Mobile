@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- 真·深色模式:不再依赖系统 forceDark 反色 -->
+    <color name="windowBackground">#0F1115</color>
+    <color name="colorPrimary">#8FA8FF</color>
+    <color name="colorAccent">#C3C0FF</color>
+    <color name="colorPrimaryContainer">#3C4B7A</color>
+    <color name="colorOnPrimaryContainer">#DCE4FF</color>
+
     <color name="bg_gray">#212121</color>
-    <color name="bg_popup">#2a2d32</color>
+    <color name="bg_popup">#2A2D32</color>
 
     <color name="text_foreground">#FFFFFF</color>
     <color name="text_sub_foreground">#AFAFAF</color>
+    <color name="light_gray_color">#3A3A3E</color>
+    <color name="gray_darker">#9E9A97</color>
+    <color name="disable_text">#8A8A90</color>
+    <color name="disable_gray">#4A4A50</color>
 </resources>

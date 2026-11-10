@@ -73,7 +73,6 @@ import com.github.tvbox.osc.viewmodel.SourceViewModel;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.gyf.immersionbar.ImmersionBar;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.enums.PopupPosition;
@@ -146,12 +145,6 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
         initViewModel();
         initData();
         registerReceiver(mBatteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-        ImmersionBar.with(this)
-                .statusBarColor(R.color.black)
-                .navigationBarColor(R.color.white)
-                .fitsSystemWindows(true)
-                .statusBarDarkFont(false)
-                .init();
         toggleScreenShotListen(true);
     }
 
@@ -295,7 +288,11 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
                     }
                 }
             };
-            registerReceiver(mHomeKeyReceiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+            androidx.core.content.ContextCompat.registerReceiver(
+                    this,
+                    mHomeKeyReceiver,
+                    new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS),
+                    androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED);
         }
     }
 
@@ -852,19 +849,11 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
             if (isIntentSafe) {
                 startActivity(intent); // 启动1DM App
             } else {
-                // 如果1DM App未安装，提示用户安装1DM App
+                // 如果1DM App未安装,提示用户自行安装(不自动打开来路不明的apk下载链接)
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("请先安装1DM+下载管理器");
-                builder.setMessage("为了下载视频，请先安装1DM+下载管理器。是否现在安装？");
-                builder.setPositiveButton("立即下载", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int which) {
-                        // 跳转到下载链接
-                        Intent downloadIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://od.lk/d/MzRfMTg0NTcxMDdf/1DM _v15.6.apk"));
-                        startActivity(downloadIntent);
-                    }
-                });
-                builder.setNegativeButton("取消", null);
+                builder.setTitle("未安装下载器");
+                builder.setMessage("该功能依赖 1DM+ Download Manager,请自行安装后再试。");
+                builder.setPositiveButton("知道了", null);
                 builder.show();
             }
         } else {
@@ -924,7 +913,7 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
                         DetailActivity.this,
                         actionCode,
                         new Intent(IntentKey.BROADCAST_ACTION).putExtra("action", actionCode),
-                        0);
+                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         final Icon icon = Icon.createWithResource(DetailActivity.this, iconResId);
         return (new RemoteAction(icon, title, desc, intent));
     }
@@ -957,7 +946,11 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
                     }
                 }
             };
-            registerReceiver(mRemoteActionReceiver, new IntentFilter(IntentKey.BROADCAST_ACTION));
+            androidx.core.content.ContextCompat.registerReceiver(
+                    this,
+                    mRemoteActionReceiver,
+                    new IntentFilter(IntentKey.BROADCAST_ACTION),
+                    androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED);
         } else {
             if (mRemoteActionReceiver != null) {
                 unregisterReceiver(mRemoteActionReceiver);

@@ -54,9 +54,7 @@ public class RemoteServer extends NanoHTTPD {
     private Context mContext;
     public static int serverPort = 9978;
     private boolean isStarted = false;
-    private DataReceiver mDataReceiver;
     private ArrayList < RequestProcess > getRequestList = new ArrayList < > ();
-    private ArrayList < RequestProcess > postRequestList = new ArrayList < > ();
 
     public static String m3u8Content;
 
@@ -64,7 +62,6 @@ public class RemoteServer extends NanoHTTPD {
         super(port);
         mContext = context;
         addGetRequestProcess();
-        addPostRequestProcess();
     }
 
     private void addGetRequestProcess() {
@@ -75,10 +72,6 @@ public class RemoteServer extends NanoHTTPD {
         getRequestList.add(new RawRequestProcess(this.mContext, "/jquery.js", R.raw.jquery, "application/x-javascript"));
         getRequestList.add(new RawRequestProcess(this.mContext, "/script.js", R.raw.script, "application/x-javascript"));
         getRequestList.add(new RawRequestProcess(this.mContext, "/favicon.ico", R.drawable.app_icon, "image/x-icon"));
-    }
-
-    private void addPostRequestProcess() {
-        postRequestList.add(new InputRequestProcess(this));
     }
 
     @Override
@@ -188,11 +181,6 @@ public class RemoteServer extends NanoHTTPD {
                 } catch (NanoHTTPD.ResponseException rex) {
                     return createPlainTextResponse(rex.getStatus(), rex.getMessage());
                 }
-                for (RequestProcess process: postRequestList) {
-                    if (process.isRequest(session, fileName)) {
-                        return process.doResponse(session, fileName, session.getParms(), files);
-                    }
-                }
                 try {
                     Map < String, String > params = session.getParms();
                     if (fileName.equals("/upload")) {
@@ -251,14 +239,6 @@ public class RemoteServer extends NanoHTTPD {
         }
         //default page: index.html
         return getRequestList.get(0).doResponse(session, "", null, null);
-    }
-
-    public void setDataReceiver(DataReceiver receiver) {
-        mDataReceiver = receiver;
-    }
-
-    public DataReceiver getDataReceiver() {
-        return mDataReceiver;
     }
 
     public boolean isStarting() {

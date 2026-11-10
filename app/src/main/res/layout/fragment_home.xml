@@ -10,13 +10,9 @@
         android:id="@+id/topLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
         android:paddingHorizontal="10dp"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:gravity="center_vertical">
 
         <LinearLayout
             android:id="@+id/nameContainer"

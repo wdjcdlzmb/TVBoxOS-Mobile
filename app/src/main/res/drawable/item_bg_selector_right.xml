@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:state_selected="true"
-        android:drawable="@drawable/button_detail_quick_search" />
-    <item
-        android:state_pressed="true"
-        android:drawable="@drawable/button_detail_quick_search" />
-    <item
-        android:state_focused="true"
-        android:drawable="@drawable/button_detail_quick_search" />
+    <item android:state_selected="true">
+        <shape>
+            <corners android:radius="@dimen/dp_20" />
+            <solid android:color="@color/color_1890FF" />
+        </shape>
+    </item>
+    <item android:state_pressed="true">
+        <shape>
+            <corners android:radius="@dimen/dp_20" />
+            <solid android:color="@color/color_1890FF" />
+        </shape>
+    </item>
+    <item android:state_focused="true">
+        <shape>
+            <corners android:radius="@dimen/dp_20" />
+            <solid android:color="@color/color_1890FF" />
+        </shape>
+    </item>
 </selector>

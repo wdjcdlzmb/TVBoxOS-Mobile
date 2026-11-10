@@ -38,6 +38,33 @@ public class StringUtils {
         return !isEmpty(obj);
     }
 
+    public static boolean isBlank(CharSequence str) {
+        if (str == null || str.length() == 0) {
+            return true;
+        }
+        for (int i = 0; i < str.length(); i++) {
+            if (!Character.isWhitespace(str.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static String substringBetween(String str, String open, String close) {
+        if (str == null || open == null || close == null) {
+            return null;
+        }
+        int start = str.indexOf(open);
+        if (start < 0) {
+            return null;
+        }
+        int end = str.indexOf(close, start + open.length());
+        if (end < 0) {
+            return null;
+        }
+        return str.substring(start + open.length(), end);
+    }
+
     private static final String U2028 = new String(new byte[]{ (byte)0xE2, (byte)0x80, (byte)0xA8 });
     private static final String U2029 = new String(new byte[]{ (byte)0xE2, (byte)0x80, (byte)0xA9 });
 

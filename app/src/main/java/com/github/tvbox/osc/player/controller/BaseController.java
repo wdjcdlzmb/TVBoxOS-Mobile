@@ -92,6 +92,8 @@ public abstract class BaseController extends BaseVideoController implements Gest
 
     private TextView mSlideInfo;
     private View mLoading;
+    private View mDoubleSeekLeft;
+    private View mDoubleSeekRight;
 
     @Override
     protected void initView() {
@@ -101,6 +103,8 @@ public abstract class BaseController extends BaseVideoController implements Gest
         setOnTouchListener(this);
         mSlideInfo = findViewWithTag("vod_control_slide_info");
         mLoading = findViewWithTag("vod_control_loading");
+        mDoubleSeekLeft = findViewWithTag("vod_control_double_seek_left");
+        mDoubleSeekRight = findViewWithTag("vod_control_double_seek_right");
     }
 
     @Override
@@ -230,12 +234,43 @@ public abstract class BaseController extends BaseVideoController implements Gest
     }
 
     /**
-     * 双击
+     * 双击:屏幕左侧快退10秒,右侧快进10秒,中间播放/暂停
      */
     @Override
     public boolean onDoubleTap(MotionEvent e) {
-        if (mIsDoubleTapTogglePlayEnabled && !isLocked() && isInPlaybackState()) togglePlay();
+        if (!isLocked() && isInPlaybackState()) {
+            int width = getWidth();
+            float x = e.getX();
+            if (width > 0 && x < width / 3f) {
+                doubleTapSeek(-10000, true);
+            } else if (width > 0 && x > width * 2 / 3f) {
+                doubleTapSeek(10000, false);
+            } else if (mIsDoubleTapTogglePlayEnabled) {
+                togglePlay();
+            }
+        }
         return true;
+    }
+
+    /** 双击屏幕两侧 ±10 秒 */
+    protected void doubleTapSeek(int offsetMs, boolean backward) {
+        int duration = (int) mControlWrapper.getDuration();
+        if (duration <= 0) return;
+        int current = (int) mControlWrapper.getCurrentPosition();
+        int target = current + offsetMs;
+        if (target < 0) target = 0;
+        if (target > duration) target = duration;
+        updateSeekUI(current, target, duration);
+        mControlWrapper.seekTo(target);
+        View ripple = backward ? mDoubleSeekLeft : mDoubleSeekRight;
+        if (ripple != null) {
+            ripple.animate().cancel();
+            ripple.setVisibility(VISIBLE);
+            ripple.setAlpha(0.9f);
+            ripple.animate().alpha(0f).setStartDelay(150).setDuration(350)
+                    .withEndAction(() -> ripple.setVisibility(INVISIBLE))
+                    .start();
+        }
     }
 
     /**

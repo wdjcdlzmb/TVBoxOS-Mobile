@@ -1,0 +1,26 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    namespace 'com.android.cast.dlna.core'
+    compileSdk 35
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 30
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core:1.6.0'
+    api 'com.orhanobut:logger:2.2.0'
+    api 'org.fourthline.cling:cling-core:2.1.1'
+    api 'org.fourthline.cling:cling-support:2.1.1'
+}

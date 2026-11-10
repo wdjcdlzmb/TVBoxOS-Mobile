@@ -43,6 +43,8 @@ public class JsLoader {
             File cacheDir = new File(App.getInstance().getCacheDir().getAbsolutePath() + "/catvod_jsapi");
             if (!cacheDir.exists())
                 cacheDir.mkdirs();
+            // Android10+ 要求动态加载的 dex 只读,否则抛 SecurityException
+            new File(jar).setWritable(false);
             DexClassLoader classLoader = new DexClassLoader(jar, cacheDir.getAbsolutePath(), null, App.getInstance().getClassLoader());
             // make force wait here, some device async dex load
             int count = 0;
