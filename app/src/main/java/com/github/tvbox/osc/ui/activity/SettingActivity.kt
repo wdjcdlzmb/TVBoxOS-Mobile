@@ -1,10 +1,13 @@
 package com.github.tvbox.osc.ui.activity
 
 import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.DiffUtil
+import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.github.tvbox.osc.R
 import com.github.tvbox.osc.api.ApiConfig
@@ -29,9 +32,13 @@ import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import com.lxj.xpopup.XPopup
 import com.orhanobut.hawk.Hawk
-import okhttp3.HttpUrl
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 /**
  * @author pj567
@@ -146,13 +153,13 @@ class SettingActivity : BaseVbActivity<ActivitySettingBinding>() {
 
                         override fun onDenied(permissions: List<String>, never: Boolean) {
                             if (never) {
-                                ToastUtils.showLong("获取存储权限失败,请在系统设置中开启")
+                                ToastUtils.showLong(R.string.storage_perm_denied_settings)
                                 XXPermissions.startPermissionActivity(
                                     this@SettingActivity,
                                     permissions
                                 )
                             } else {
-                                ToastUtils.showShort("获取存储权限失败")
+                                ToastUtils.showShort(R.string.storage_perm_denied)
                             }
                         }
                     })
@@ -163,13 +170,13 @@ class SettingActivity : BaseVbActivity<ActivitySettingBinding>() {
             FastClickCheckUtil.check(v)
             val dohUrl = Hawk.get(HawkConfig.DOH_URL, 0)
             val dialog = SelectDialog<String>(this@SettingActivity)
-            dialog.setTip("请选择安全DNS")
+            dialog.setTip(getString(R.string.select_secure_dns))
             dialog.setAdapter(object : SelectDialogInterface<String?> {
                 override fun click(value: String?, pos: Int) {
                     mBinding.tvDns.text = OkGoHelper.dnsHttpsList[pos]
                     Hawk.put(HawkConfig.DOH_URL, pos)
                     val url = OkGoHelper.getDohUrl(pos)
-                    OkGoHelper.dnsOverHttps.setUrl(if (url.isEmpty()) null else HttpUrl.get(url))
+                    OkGoHelper.dnsOverHttps = OkGoHelper.buildDnsOverHttps(url)
                     IjkMediaPlayer.toggleDotPort(pos > 0)
                 }
 
@@ -193,7 +200,7 @@ class SettingActivity : BaseVbActivity<ActivitySettingBinding>() {
                 }
             }
             val dialog = SelectDialog<IJKCode>(this@SettingActivity)
-            dialog.setTip("请选择IJK解码")
+            dialog.setTip(getString(R.string.select_ijk_codec))
             dialog.setAdapter(object : SelectDialogInterface<IJKCode?> {
                 override fun click(value: IJKCode?, pos: Int) {
                     value?.selected(true)
@@ -226,7 +233,7 @@ class SettingActivity : BaseVbActivity<ActivitySettingBinding>() {
             players.add(4)
             players.add(5)
             val dialog = SelectDialog<Int>(this@SettingActivity)
-            dialog.setTip("请选择画面缩放")
+            dialog.setTip(getString(R.string.select_scale))
             dialog.setAdapter(object : SelectDialogInterface<Int?> {
                 override fun click(value: Int?, pos: Int) {
                     Hawk.put(HawkConfig.PLAY_SCALE, value)
@@ -261,7 +268,7 @@ class SettingActivity : BaseVbActivity<ActivitySettingBinding>() {
                 }
             }
             val dialog = SelectDialog<Int>(this@SettingActivity)
-            dialog.setTip("请选择默认播放器")
+            dialog.setTip(getString(R.string.select_default_player))
             dialog.setAdapter(object : SelectDialogInterface<Int?> {
                 override fun click(value: Int?, pos: Int) {
                     val thisPlayerType = players[pos]
@@ -292,7 +299,7 @@ class SettingActivity : BaseVbActivity<ActivitySettingBinding>() {
             renders.add(0)
             renders.add(1)
             val dialog = SelectDialog<Int>(this@SettingActivity)
-            dialog.setTip("请选择默认渲染方式")
+            dialog.setTip(getString(R.string.select_default_render))
             dialog.setAdapter(object : SelectDialogInterface<Int?> {
                 override fun click(value: Int?, pos: Int) {
                     Hawk.put(HawkConfig.PLAY_RENDER, value)
@@ -322,7 +329,7 @@ class SettingActivity : BaseVbActivity<ActivitySettingBinding>() {
             types.add(1)
             types.add(2)
             val dialog = SelectDialog<Int>(this@SettingActivity)
-            dialog.setTip("主页内容显示")
+            dialog.setTip(getString(R.string.home_content_display))
             dialog.setAdapter(object : SelectDialogInterface<Int?> {
                 override fun click(value: Int?, pos: Int) {
                     Hawk.put(HawkConfig.HOME_REC, value)
@@ -352,7 +359,7 @@ class SettingActivity : BaseVbActivity<ActivitySettingBinding>() {
             types.add(1)
             types.add(2)
             val dialog = SelectDialog<Int>(this@SettingActivity)
-            dialog.setTip("保留历史记录数量")
+            dialog.setTip(getString(R.string.keep_history_count))
             dialog.setAdapter(object : SelectDialogInterface<Int?> {
                 override fun click(value: Int?, pos: Int) {
                     Hawk.put(HawkConfig.HISTORY_NUM, value)
@@ -376,7 +383,11 @@ class SettingActivity : BaseVbActivity<ActivitySettingBinding>() {
         mBinding.llClearCache.setOnClickListener { view: View ->
             XPopup.Builder(this)
                 .isDarkTheme(Utils.isDarkTheme())
-                .asConfirm("提示", "确定清空吗？") { onClickClearCache(view) }.show()
+                .asConfirm(getString(R.string.tip), getString(R.string.confirm_clear_cache)) { onClickClearCache(view) }.show()
+        }
+        mBinding.llCheckUpdate.setOnClickListener { v: View? ->
+            FastClickCheckUtil.check(v)
+            checkUpdate()
         }
         val oldTheme = Hawk.get(HawkConfig.THEME_TAG, 0)
         val themes = arrayOf("跟随系统", "浅色", "深色")
@@ -441,7 +452,7 @@ class SettingActivity : BaseVbActivity<ActivitySettingBinding>() {
                 0
             ) || currentLiveApi != Hawk.get(HawkConfig.LIVE_URL, "")
         ) { // 首页类型/dns/doh/直播源有更改,需重载页面
-            //AppManager.getInstance().finishAllActivity()
+        //AppManager.getInstance().finishAllActivity()
             if (currentLiveApi == Hawk.get(HawkConfig.LIVE_URL, "")) { //未更改直播源,不需重载api等
                 val bundle = Bundle()
                 bundle.putBoolean(IntentKey.CACHE_CONFIG_CHANGED, true)
@@ -467,7 +478,92 @@ class SettingActivity : BaseVbActivity<ActivitySettingBinding>() {
                 e.printStackTrace()
             }
         }.start()
-        ToastUtils.showLong("缓存已清空")
+        ToastUtils.showLong(R.string.cache_cleared)
+    }
+
+    private fun checkUpdate() {
+        ToastUtils.showShort(R.string.checking_update)
+        Thread {
+            try {
+                val client = OkHttpClient.Builder()
+                    .connectTimeout(10, TimeUnit.SECONDS)
+                    .readTimeout(10, TimeUnit.SECONDS)
+                    .build()
+                val request = Request.Builder()
+                    .url("https://api.github.com/repos/wdjcdlzmb/TVBoxOS-Mobile/releases/latest")
+                    .header("Accept", "application/vnd.github+json")
+                    .header("User-Agent", "MBox-Android")
+                    .build()
+                client.newCall(request).execute().use { resp ->
+                    when {
+                        resp.code == 404 -> showToast(R.string.no_new_version)
+                        resp.isSuccessful -> handleUpdateInfo(resp.body?.string())
+                        else -> showToast(R.string.update_check_failed)
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                showToast(R.string.update_check_failed)
+            }
+        }.start()
+    }
+
+    private fun showToast(resId: Int) {
+        runOnUiThread { ToastUtils.showShort(resId) }
+    }
+
+    private fun handleUpdateInfo(json: String?) {
+        try {
+            val obj = Gson().fromJson(json, JsonObject::class.java)
+            val tagName = obj?.get("tag_name")?.asString
+            if (tagName.isNullOrEmpty()) {
+                showToast(R.string.update_check_failed)
+                return
+            }
+            if (!isNewerVersion(tagName)) {
+                showToast(R.string.already_latest)
+                return
+            }
+            val htmlUrl = obj.get("html_url")?.asString ?: ""
+            runOnUiThread {
+                XPopup.Builder(this@SettingActivity)
+                    .isDarkTheme(Utils.isDarkTheme())
+                    .asConfirm(
+                        getString(R.string.tip),
+                        String.format(getString(R.string.update_found_msg), tagName),
+                        getString(R.string.cancel),
+                        getString(R.string.go_download),
+                        { openDownloadPage(htmlUrl) },
+                        null,
+                        false
+                    ).show()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            showToast(R.string.update_check_failed)
+        }
+    }
+
+    private fun openDownloadPage(url: String) {
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ToastUtils.showShort(R.string.url_load_failed)
+        }
+    }
+
+    private fun isNewerVersion(remote: String): Boolean {
+        fun parse(v: String): List<Int> = v.trim().removePrefix("v").removePrefix("V")
+            .split(".").map { part -> part.filter { it.isDigit() }.toIntOrNull() ?: 0 }
+        val cur = parse(AppUtils.getAppVersionName())
+        val rem = parse(remote)
+        for (i in 0 until maxOf(cur.size, rem.size)) {
+            val c = cur.getOrElse(i) { 0 }
+            val r = rem.getOrElse(i) { 0 }
+            if (r != c) return r > c
+        }
+        return false
     }
 
     private fun getHomeRecName(type: Int): String {

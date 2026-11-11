@@ -22,7 +22,7 @@ import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.DrawerPopupView;
 import com.lxj.xpopup.enums.PopupPosition;
 import com.lxj.xpopup.interfaces.OnSelectListener;
-import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -53,7 +53,7 @@ public class AllChannelsRightDialog extends DrawerPopupView {
 
     private void initChannelGroupView() {
         mBinding.mGroupGridView.setHasFixedSize(true);
-        mBinding.mGroupGridView.setLayoutManager(new V7LinearLayoutManager(getContext(), 1, false));
+        mBinding.mGroupGridView.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
 
         if (mActivity.liveChannelGroupAdapter!=null){
             mBinding.mGroupGridView.setAdapter(mActivity.liveChannelGroupAdapter);
@@ -62,7 +62,7 @@ public class AllChannelsRightDialog extends DrawerPopupView {
     }
     private void initLiveChannelView() {
         mBinding.mChannelGridView.setHasFixedSize(true);
-        mBinding.mChannelGridView.setLayoutManager(new V7LinearLayoutManager(getContext(), 1, false));
+        mBinding.mChannelGridView.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
 
         if (mActivity.liveChannelItemAdapter!=null){
             mBinding.mChannelGridView.setAdapter(mActivity.liveChannelItemAdapter);

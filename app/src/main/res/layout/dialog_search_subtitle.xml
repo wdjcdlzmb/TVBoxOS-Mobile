@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/input_search"
-                    android:hint="请输入字幕名称"
+                    android:hint="@string/subtitle_search_hint"
                     android:inputType="text"
                     android:maxLines="1"
                     android:paddingLeft="@dimen/dp_20"
@@ -55,7 +55,7 @@
                     android:layout_height="33dp"
                     android:layout_marginLeft="8dp"
                     android:textSize="15dp"
-                    android:text="搜索" />
+                    android:text="@string/search" />
             </LinearLayout>
 
             <ScrollView
@@ -73,15 +73,12 @@
                     android:clipToPadding="false"
                     android:orientation="vertical">
 
-                    <com.owen.tvrecyclerview.widget.TvRecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/mGridView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:clipChildren="false"
                         android:clipToPadding="false"
-                        app:tv_horizontalSpacingWithMargins="@dimen/dp_5"
-                        app:tv_selectedItemIsCentered="true"
-                        app:tv_verticalSpacingWithMargins="@dimen/dp_5"
                         tools:listitem="@layout/item_search_subtitle_result"/>
 
                 </LinearLayout>

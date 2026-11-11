@@ -151,7 +151,7 @@ public class RemoteServer extends NanoHTTPD {
                     String name = session.getParms().get("name");
                     byte[] rs = null;
                     try {
-                        rs = OkGoHelper.dnsOverHttps.lookupHttpsForwardSync(name);
+                        rs = OkGoHelper.lookupHttpsForwardSync(name);
                     } catch (Throwable th) {
                         rs = new byte[0];
                     }

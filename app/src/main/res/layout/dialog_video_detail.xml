@@ -123,7 +123,7 @@
             android:id="@+id/tv_link_tip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="链接："/>
+            android:text="@string/link_label"/>
         <TextView
             android:id="@+id/url"
             android:layout_toRightOf="@+id/tv_link_tip"
@@ -137,7 +137,7 @@
             android:id="@+id/tv_link_copy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="复制"
+            android:text="@string/copy"
             android:textColor="@color/color_1890FF"
             android:paddingLeft="10dp"
             android:layout_alignParentRight="true"/>

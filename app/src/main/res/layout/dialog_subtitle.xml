@@ -36,7 +36,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:focusable="true"
-                        android:text="打开字幕" />
+                        android:text="@string/open_subtitle" />
                     <Space
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -52,7 +52,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:focusable="true"
-                        android:text="关闭字幕" />
+                        android:text="@string/close_subtitle" />
 
                 </LinearLayout>
 
@@ -69,7 +69,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:focusable="true"
-                        android:text="字号减小" />
+                        android:text="@string/font_size_down" />
 
                     <TextView
                         android:id="@+id/subtitleSizeText"
@@ -90,7 +90,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:focusable="true"
-                        android:text="字号增大" />
+                        android:text="@string/font_size_up" />
 
                 </LinearLayout>
 
@@ -107,7 +107,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:focusable="true"
-                        android:text="样式一"
+                        android:text="@string/style_one"
                         android:shadowColor="@color/text_foreground"
                         android:shadowRadius="2"
                         android:shadowDx="1"
@@ -130,7 +130,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:focusable="true"
-                        android:text="样式二"
+                        android:text="@string/style_two"
                         android:textStyle="bold"
                         android:textColor="@color/color_FFB6C1"
                         android:shadowColor="@color/color_FFFFFF"
@@ -153,7 +153,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:focusable="true"
-                        android:text="字幕提前" />
+                        android:text="@string/subtitle_advance" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -175,7 +175,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:text="(仅外挂)"
+                            android:text="@string/external_only"
                             android:layout_marginLeft="10dp"
                             android:textSize="10sp"
                             android:textColor="@color/text_foreground"/>
@@ -188,7 +188,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:focusable="true"
-                        android:text="字幕推迟" />
+                        android:text="@string/subtitle_delay" />
 
                 </LinearLayout>
 
@@ -205,7 +205,7 @@
                         android:layout_weight="1"
                         android:layout_height="match_parent"
                         android:focusable="true"
-                        android:text="本地" />
+                        android:text="@string/local" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/selectInternal"
@@ -213,7 +213,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
-                        android:text="内置"
+                        android:text="@string/built_in"
                         android:layout_marginLeft="10dp"/>
 
                     <com.google.android.material.button.MaterialButton
@@ -222,7 +222,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
-                        android:text="搜索"
+                        android:text="@string/search"
                         android:layout_marginLeft="10dp"/>
                 </LinearLayout>
 

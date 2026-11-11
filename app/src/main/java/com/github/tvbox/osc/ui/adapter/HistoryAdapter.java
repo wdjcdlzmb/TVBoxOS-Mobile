@@ -21,7 +21,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import me.jessyan.autosize.utils.AutoSizeUtils;
 
 /**
  * @author pj567

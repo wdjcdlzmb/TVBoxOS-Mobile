@@ -54,7 +54,7 @@
                 android:layout_weight="1"
                 android:layout_height="33dp"
                 android:layout_marginRight="20dp"
-                android:text="重 试"
+                android:text="@string/btn_retry_spaced"
                 app:strokeColor="@color/colorPrimary"
                 />
 
@@ -68,7 +68,7 @@
                 android:layout_height="33dp"
                 android:textColor="@color/text_sub_foreground"
                 app:strokeColor="@color/text_sub_foreground"
-                android:text="取 消"/>
+                android:text="@string/btn_cancel_spaced"/>
 
         </LinearLayout>
     </LinearLayout>

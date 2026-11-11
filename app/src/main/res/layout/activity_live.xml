@@ -27,7 +27,7 @@
 			android:orientation="horizontal"
 			android:visibility="gone" >
 
-			<com.owen.tvrecyclerview.widget.TvRecyclerView
+			<androidx.recyclerview.widget.RecyclerView
 				android:id="@+id/mSettingItemView"
 				android:layout_width="180dp"
 				android:layout_height="match_parent"
@@ -36,9 +36,7 @@
 				android:paddingRight="5dp"
 				android:paddingBottom="10dp"
 				android:visibility="visible"
-				android:gravity= "center"
-				app:tv_selectedItemIsCentered="true"
-				app:tv_verticalSpacingWithMargins="10dp" />
+				android:gravity= "center" />
 
 			<View
 				android:layout_width="1dp"
@@ -46,7 +44,7 @@
 				android:background="@color/color_FFFFFF"
 				android:layout_gravity="center_horizontal" />
 
-			<com.owen.tvrecyclerview.widget.TvRecyclerView
+			<androidx.recyclerview.widget.RecyclerView
 				android:id="@+id/mSettingGroupView"
 				android:layout_width="180dp"
 				android:layout_height="match_parent"
@@ -55,9 +53,7 @@
 				android:paddingRight="5dp"
 				android:paddingBottom="10dp"
 				android:visibility="visible"
-				android:gravity= "center"
-				app:tv_selectedItemIsCentered="true"
-				app:tv_verticalSpacingWithMargins="10dp" />
+				android:gravity= "center" />
 		</LinearLayout>
 
 	</RelativeLayout>
@@ -89,7 +85,7 @@
 				android:gravity="center"
 				android:paddingTop="0dp"
 				android:singleLine="true"
-				android:text="中央 HD"
+				android:text="@string/sample_channel_cctv_hd"
 				android:textStyle="bold"
 				android:textSize="16sp" />
 
@@ -133,7 +129,7 @@
 				android:id="@+id/tv_source"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="源 1/1"
+				android:text="@string/source_index"
 				android:layout_marginHorizontal="14dp"
 				android:textSize="16sp"
 				android:textColor="@color/text_foreground"

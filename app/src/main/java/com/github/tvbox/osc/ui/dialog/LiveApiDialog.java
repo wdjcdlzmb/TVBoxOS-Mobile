@@ -40,7 +40,7 @@ public class LiveApiDialog extends CenterPopupView {
         mBinding.ivHistory.setOnClickListener(view -> {
             ArrayList<String> liveHistory = Hawk.get(HawkConfig.LIVE_HISTORY, new ArrayList<String>());
             if (liveHistory.isEmpty()){
-                ToastUtils.showShort("暂无历史记录");
+                ToastUtils.showShort(R.string.no_history_yet);
                 return;
             }
             new XPopup.Builder(getContext())
@@ -61,7 +61,7 @@ public class LiveApiDialog extends CenterPopupView {
                     liveHistory.remove(20);
                 Hawk.put(HawkConfig.LIVE_HISTORY, liveHistory);
             }
-            ToastUtils.showShort("设置成功");
+            ToastUtils.showShort(R.string.set_success);
             dismiss();
         });
     }

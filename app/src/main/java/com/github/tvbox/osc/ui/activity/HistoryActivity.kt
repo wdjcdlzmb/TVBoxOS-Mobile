@@ -9,11 +9,11 @@ import com.github.tvbox.osc.base.BaseVbActivity
 import com.github.tvbox.osc.bean.VodInfo
 import com.github.tvbox.osc.cache.RoomDataManger
 import com.github.tvbox.osc.databinding.ActivityHistoryBinding
+import com.github.tvbox.osc.R
 import com.github.tvbox.osc.ui.adapter.HistoryAdapter
 import com.github.tvbox.osc.util.FastClickCheckUtil
 import com.github.tvbox.osc.util.Utils
 import com.lxj.xpopup.XPopup
-import com.owen.tvrecyclerview.widget.V7GridLayoutManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -48,7 +48,7 @@ class HistoryActivity : BaseVbActivity<ActivityHistoryBinding>() {
         mBinding.titleBar.rightView.setOnClickListener { view: View? ->
             XPopup.Builder(this)
                 .isDarkTheme(Utils.isDarkTheme())
-                .asConfirm("提示", "确定清空?") {
+                .asConfirm(getString(R.string.tip), getString(R.string.confirm_clear)) {
 
                     showLoadingDialog()
                     lifecycleScope.launch(Dispatchers.IO) {

@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.jessyan.autosize.utils.AutoSizeUtils;
+import com.blankj.utilcode.util.ConvertUtils;
 
 public class DoubanSuggestAdapter extends BaseQuickAdapter<DoubanSuggestBean, BaseViewHolder> {
     public DoubanSuggestAdapter(List<DoubanSuggestBean> list) {
@@ -34,8 +34,8 @@ public class DoubanSuggestAdapter extends BaseQuickAdapter<DoubanSuggestBean, Ba
                 .load(item.getImg())
                 .transform(new RoundTransformation(MD5.string2MD5(item.getImg() + "position=" + helper.getLayoutPosition()))
                         .centerCorp(true)
-                        .override(AutoSizeUtils.dp2px(mContext, 110), AutoSizeUtils.dp2px(mContext, 160))
-                        .roundRadius(AutoSizeUtils.dp2px(mContext, 6), RoundTransformation.RoundType.ALL))
+                        .override(ConvertUtils.dp2px(110), ConvertUtils.dp2px(160))
+                        .roundRadius(ConvertUtils.dp2px(6), RoundTransformation.RoundType.ALL))
                 .placeholder(R.drawable.img_loading_placeholder)
                 .error(R.drawable.img_loading_placeholder)
                 .into((ImageView) helper.getView(R.id.ivThumb));

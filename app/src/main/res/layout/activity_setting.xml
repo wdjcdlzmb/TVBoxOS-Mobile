@@ -34,7 +34,7 @@
                 android:layout_marginStart="40dp"
                 android:layout_marginBottom="8dp"
                 android:letterSpacing="0.06"
-                android:text="通用"
+                android:text="@string/settings_general"
                 android:textColor="@color/text_sub_foreground"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -61,7 +61,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="主页内容"
+                        android:text="@string/home_content"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"/>
 
@@ -101,7 +101,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="聚合模式"
+                        android:text="@string/aggregate_mode"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
@@ -142,7 +142,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="主题颜色"
+                        android:text="@string/theme_color"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
@@ -181,7 +181,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="直播源"
+                        android:text="@string/live_source"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
@@ -214,7 +214,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="无痕浏览"
+                        android:text="@string/incognito"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
@@ -239,7 +239,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="8dp"
                 android:letterSpacing="0.06"
-                android:text="播放"
+                android:text="@string/play"
                 android:textColor="@color/text_sub_foreground"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -265,7 +265,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="播放器"
+                        android:text="@string/player"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
@@ -303,7 +303,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="广告过滤"
+                        android:text="@string/ad_filter"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"/>
 
@@ -333,7 +333,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="长按倍速"
+                        android:text="@string/long_press_speed"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
@@ -373,7 +373,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="后台播放"
+                        android:text="@string/background_play"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
@@ -411,7 +411,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="IJK解码方式"
+                        android:text="@string/ijk_decode_mode"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
@@ -449,7 +449,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="渲染方式"
+                        android:text="@string/render_mode"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
@@ -487,7 +487,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="画面缩放"
+                        android:text="@string/aspect_scale"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
@@ -526,7 +526,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="IJK缓存"
+                        android:text="@string/ijk_cache"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"/>
 
@@ -551,7 +551,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="8dp"
                 android:letterSpacing="0.06"
-                android:text="数据"
+                android:text="@string/data"
                 android:textColor="@color/text_sub_foreground"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -577,7 +577,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="数据备份还原"
+                        android:text="@string/backup_restore_title"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"/>
 
@@ -609,7 +609,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="安全DNS"
+                        android:text="@string/secure_dns"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"/>
 
@@ -646,7 +646,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="历史记录"
+                        android:text="@string/history_title"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
@@ -686,7 +686,39 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="清空缓存"
+                        android:text="@string/clear_cache"
+                        android:textColor="@color/text_foreground"
+                        android:textSize="16sp"
+                        />
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:layout_gravity="center"
+                        android:alpha="0.75"
+                        android:src="@drawable/icon_pre"
+                        app:tint="@color/text_foreground"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llCheckUpdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_60"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="40dp"
+                    android:foreground="?android:selectableItemBackground">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/check_update"
                         android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />

@@ -23,7 +23,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/text_foreground"
-            android:text="请选择"/>
+            android:text="@string/please_select"/>
         <ImageView
             android:id="@+id/iv_use_tip"
             android:layout_width="30dp"

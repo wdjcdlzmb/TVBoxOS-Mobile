@@ -21,7 +21,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="倍速"
+                android:text="@string/speed"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="10dp"
-                android:text="缩放"
+                android:text="@string/scale"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -161,7 +161,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="10dp"
-                android:text="跳过片头/片尾"
+                android:text="@string/skip_intro_outro"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
@@ -239,7 +239,7 @@
                     android:paddingVertical="4dp"
                     android:paddingHorizontal="10dp"
                     android:layout_marginStart="10dp"
-                    android:text="重置" />
+                    android:text="@string/reset" />
             </LinearLayout>
 
 
@@ -248,7 +248,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="10dp"
-                android:text="播放器"
+                android:text="@string/player"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
@@ -296,7 +296,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="10dp"
-                android:text="其他"
+                android:text="@string/other"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
@@ -317,7 +317,7 @@
                     android:textColor="@color/text_foreground"
                     android:paddingVertical="4dp"
                     android:paddingHorizontal="10dp"
-                    android:text="横竖屏"
+                    android:text="@string/orientation"
                     android:visibility="gone"
                     tools:visibility="visible"
                     />
@@ -333,7 +333,7 @@
                     android:textColor="@color/text_foreground"
                     android:paddingVertical="4dp"
                     android:paddingHorizontal="10dp"
-                    android:text="字幕" />
+                    android:text="@string/subtitle" />
 
                 <TextView
                     android:id="@+id/voice"
@@ -346,7 +346,7 @@
                     android:textColor="@color/text_foreground"
                     android:paddingVertical="4dp"
                     android:paddingHorizontal="10dp"
-                    android:text="音轨" />
+                    android:text="@string/audio_track" />
 
 
                 <TextView
@@ -360,7 +360,7 @@
                     android:textColor="@color/text_foreground"
                     android:paddingVertical="4dp"
                     android:paddingHorizontal="10dp"
-                    android:text="重播" />
+                    android:text="@string/replay" />
 
                 <TextView
                     android:id="@+id/refresh"
@@ -373,7 +373,7 @@
                     android:textColor="@color/text_foreground"
                     android:paddingVertical="4dp"
                     android:paddingHorizontal="10dp"
-                    android:text="刷新" />
+                    android:text="@string/refresh" />
 
                 <TextView
                     android:id="@+id/download"
@@ -386,7 +386,7 @@
                     android:textColor="@color/text_foreground"
                     android:paddingVertical="4dp"
                     android:paddingHorizontal="10dp"
-                    android:text="下载"
+                    android:text="@string/download"
                     android:visibility="gone"
                     tools:visibility="visible"/>
 

@@ -17,7 +17,9 @@ import com.github.tvbox.osc.base.App;
 import com.github.tvbox.osc.data.AppDataManager;
 import com.github.tvbox.osc.ui.adapter.TitleWithDelAdapter;
 import com.github.tvbox.osc.util.FileUtils;
-import com.owen.tvrecyclerview.widget.TvRecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.github.tvbox.osc.ui.widget.LinearSpacingItemDecoration;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -36,7 +38,9 @@ public class BackupDialog extends BaseDialog {
     public BackupDialog(@NonNull @NotNull Context context) {
         super(context);
         setContentView(R.layout.dialog_backup);
-        TvRecyclerView tvRecyclerView = ((TvRecyclerView) findViewById(R.id.list));
+        RecyclerView tvRecyclerView = ((RecyclerView) findViewById(R.id.list));
+        tvRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        tvRecyclerView.addItemDecoration(new LinearSpacingItemDecoration(20, true));
         TitleWithDelAdapter adapter = new TitleWithDelAdapter();
         tvRecyclerView.setAdapter(adapter);
         adapter.setNewData(allBackup());
@@ -112,13 +116,13 @@ public class BackupDialog extends BaseDialog {
                                 sharedPreferences.edit().putString(key, value).commit();
                             }
                         }
-                        Toast.makeText(getContext(), "恢复成功,即将重启应用!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.restore_success_restart, Toast.LENGTH_SHORT).show();
                         new Handler().postDelayed(() -> AppUtils.relaunchApp(true),2000);
                     } else {
-                        Toast.makeText(getContext(), "Hawk恢复失败!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.hawk_restore_failed, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getContext(), "DB文件恢复失败!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.db_restore_failed, Toast.LENGTH_SHORT).show();
                 }
             }
         } catch (Throwable e) {
@@ -149,17 +153,17 @@ public class BackupDialog extends BaseDialog {
                 }
                 if (!FileUtils.writeSimple(jsonObject.toString().getBytes("UTF-8"), new File(backup, "hawk"))) {
                     backup.delete();
-                    Toast.makeText(getContext(), "备份Hawk失败!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.hawk_backup_failed, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getContext(), "备份成功!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.backup_success, Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(getContext(), "DB文件不存在!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.db_file_missing, Toast.LENGTH_SHORT).show();
                 backup.delete();
             }
         } catch (Throwable e) {
             e.printStackTrace();
-            Toast.makeText(getContext(), "备份失败!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.backup_failed, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -168,7 +172,7 @@ public class BackupDialog extends BaseDialog {
             String root = Environment.getExternalStorageDirectory().getAbsolutePath();
             File backup = new File(root + "/tvbox_backup/" + dir);
             FileUtils.recursiveDelete(backup);
-            ToastUtils.showShort("删除成功");
+            ToastUtils.showShort(R.string.delete_success);
         } catch (Throwable e) {
             e.printStackTrace();
         }

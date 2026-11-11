@@ -378,8 +378,10 @@ public class OkHttpDataSource extends BaseDataSource implements HttpDataSource {
         long position = dataSpec.position;
         long length = dataSpec.length;
 
-        @Nullable HttpUrl url = HttpUrl.parse(dataSpec.uri.toString());
-        if (url == null) {
+        @Nullable HttpUrl url;
+        try {
+            url = HttpUrl.get(dataSpec.uri.toString());
+        } catch (IllegalArgumentException e) {
             throw new HttpDataSourceException(
                     "Malformed URL",
                     dataSpec,

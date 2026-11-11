@@ -13,15 +13,13 @@ import com.github.tvbox.osc.callback.EmptyCallback
 import com.github.tvbox.osc.callback.LoadingCallback
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
-import me.jessyan.autosize.AutoSize
-import me.jessyan.autosize.internal.CustomAdapt
 import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
 
 /**
  * Fragment的基类(vb)
  */
-abstract class BaseVbFragment<T : ViewBinding> : Fragment(), CustomAdapt {
+abstract class BaseVbFragment<T : ViewBinding> : Fragment() {
     @JvmField
     protected var mContext: Context? = null
     @JvmField
@@ -34,7 +32,6 @@ abstract class BaseVbFragment<T : ViewBinding> : Fragment(), CustomAdapt {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        AutoSize.autoConvertDensity(activity, sizeInDp, isBaseOnWidth)
         return initBindingViewRoot(container)
     }
 
@@ -75,7 +72,6 @@ abstract class BaseVbFragment<T : ViewBinding> : Fragment(), CustomAdapt {
      * 在滑动或者跳转的过程中，第一次创建fragment的时候均会调用onResume方法
      */
     override fun onResume() {
-        AutoSize.autoConvertDensity(activity, sizeInDp, isBaseOnWidth)
         super.onResume()
     }
 
@@ -119,11 +115,4 @@ abstract class BaseVbFragment<T : ViewBinding> : Fragment(), CustomAdapt {
         startActivity(intent)
     }
 
-    override fun getSizeInDp(): Float {
-        return if (activity != null && activity is CustomAdapt) (activity as CustomAdapt?)!!.sizeInDp else 0f
-    }
-
-    override fun isBaseOnWidth(): Boolean {
-        return if (activity != null && activity is CustomAdapt) (activity as CustomAdapt?)!!.isBaseOnWidth else true
-    }
 }

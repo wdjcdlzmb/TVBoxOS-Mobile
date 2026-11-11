@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.DiffUtil;
 import com.blankj.utilcode.util.ConvertUtils;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.ui.adapter.SelectDialogAdapter;
-import com.owen.tvrecyclerview.widget.TvRecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.github.tvbox.osc.ui.widget.LinearSpacingItemDecoration;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -52,14 +54,16 @@ public class SelectDialog<T> extends BaseDialog {
     public void setAdapter(SelectDialogAdapter.SelectDialogInterface<T> sourceBeanSelectDialogInterface, DiffUtil.ItemCallback<T> sourceBeanItemCallback, List<T> data, int select) {
         SelectDialogAdapter<T> adapter = new SelectDialogAdapter(sourceBeanSelectDialogInterface, sourceBeanItemCallback);
         adapter.setData(data, select);
-        TvRecyclerView tvRecyclerView = ((TvRecyclerView) findViewById(R.id.list));
+        RecyclerView tvRecyclerView = ((RecyclerView) findViewById(R.id.list));
+        if (tvRecyclerView.getLayoutManager() == null) {
+            tvRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
+        tvRecyclerView.addItemDecoration(new LinearSpacingItemDecoration(20, true));
         tvRecyclerView.setAdapter(adapter);
-        tvRecyclerView.setSelectedPosition(select);
         tvRecyclerView.post(new Runnable() {
             @Override
             public void run() {
                 tvRecyclerView.smoothScrollToPosition(select);
-                tvRecyclerView.setSelectionWithSmooth(select);
             }
         });
     }

@@ -182,7 +182,7 @@ public class SubtitleDialog extends BaseDialog {
                 int style = 0;
                 dismiss();
                 mSubtitleViewListener.setTextStyle(style);
-                Toast.makeText(getContext(), "设置样式成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.style_saved, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -192,7 +192,7 @@ public class SubtitleDialog extends BaseDialog {
                 int style = 1;
                 dismiss();
                 mSubtitleViewListener.setTextStyle(style);
-                Toast.makeText(getContext(), "设置样式成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.style_saved, Toast.LENGTH_SHORT).show();
             }
         });
         findViewById(R.id.subtitleOpen).setOnClickListener(v -> {

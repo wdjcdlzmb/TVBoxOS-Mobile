@@ -9,6 +9,7 @@ import android.os.Handler;
 import com.blankj.utilcode.util.GsonUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.base.BaseVbActivity;
 import com.github.tvbox.osc.bean.ParseBean;
 import com.github.tvbox.osc.bean.VideoInfo;
@@ -139,7 +140,7 @@ public class LocalPlayActivity extends BaseVbActivity<ActivityLocalPlayBinding> 
 //                String preProgressKey = progressKey;
 //                LocalPlayActivity.this.playNext(rmProgress);
                 if (mPosition == mVideoList.size() - 1){
-                    ToastUtils.showShort("当前已经是最后一集了");
+                    ToastUtils.showShort(R.string.already_last_episode);
                 } else {
                     mPosition++;
                     play(true);
@@ -150,7 +151,7 @@ public class LocalPlayActivity extends BaseVbActivity<ActivityLocalPlayBinding> 
             public void playPre() {
                 //playPrevious();
                 if (mPosition == 0){
-                    ToastUtils.showShort("当前已经是第一集了");
+                    ToastUtils.showShort(R.string.already_first_episode);
                 }else {
                     mPosition--;
                     play(true);

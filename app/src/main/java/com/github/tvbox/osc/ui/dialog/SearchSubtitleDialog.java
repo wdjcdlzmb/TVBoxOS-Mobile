@@ -30,8 +30,9 @@ import com.github.tvbox.osc.bean.SubtitleData;
 import com.github.tvbox.osc.ui.adapter.SearchSubtitleAdapter;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.viewmodel.SubtitleViewModel;
-import com.owen.tvrecyclerview.widget.TvRecyclerView;
-import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.github.tvbox.osc.ui.widget.LinearSpacingItemDecoration;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -41,7 +42,7 @@ import java.util.List;
 public class SearchSubtitleDialog extends BaseDialog {
 
     private Context mContext;
-    private TvRecyclerView mGridView;
+    private RecyclerView mGridView;
     private SearchSubtitleAdapter searchAdapter;
 
     private TextView subtitleSearchBtn;
@@ -87,7 +88,8 @@ public class SearchSubtitleDialog extends BaseDialog {
         subtitleSearchBtn = findViewById(R.id.inputSubmit);
         searchAdapter = new SearchSubtitleAdapter();
         mGridView.setHasFixedSize(true);
-        mGridView.setLayoutManager(new V7LinearLayoutManager(getContext(), 1, false));
+        mGridView.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
+        mGridView.addItemDecoration(new LinearSpacingItemDecoration(20, true));
         mGridView.setAdapter(searchAdapter);
         searchAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -103,7 +105,7 @@ public class SearchSubtitleDialog extends BaseDialog {
                         subtitleViewModel.getSearchResultSubtitleUrls(subtitle);
                     } else {
                         if (TextUtils.isEmpty(subtitle.getUrl())){
-                            ToastUtils.showShort("url加载失败,请重新搜索");
+                            ToastUtils.showShort(R.string.url_load_failed);
                             return;
                         }
                         loadSubtitle(subtitle);
@@ -162,7 +164,7 @@ public class SearchSubtitleDialog extends BaseDialog {
             searchWord = wd;
             subtitleViewModel.searchResult(wd, page = 1);
         } else {
-            Toast.makeText(getContext(), "输入内容不能为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.input_empty, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -178,7 +180,7 @@ public class SearchSubtitleDialog extends BaseDialog {
                     mGridView.post(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getContext(), "未查询到匹配字幕", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.no_subtitle_found, Toast.LENGTH_SHORT).show();
                         }
                     });
                     return;

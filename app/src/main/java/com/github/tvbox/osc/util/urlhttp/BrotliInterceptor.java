@@ -14,7 +14,6 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okhttp3.internal.http.RealResponseBody;
 import okio.GzipSource;
 import okio.Okio;
 import okio.Source;
@@ -57,7 +56,7 @@ public class BrotliInterceptor implements Interceptor {
                 return response.newBuilder()
                         .removeHeader("Content-Encoding")
                         .removeHeader("Content-Length")
-                        .body(RealResponseBody.create(body.contentType(), -1L, Okio.buffer(brotliSource)))
+                        .body(ResponseBody.create(body.contentType(), -1L, Okio.buffer(brotliSource)))
                         .build();
             } else {
                 return response;

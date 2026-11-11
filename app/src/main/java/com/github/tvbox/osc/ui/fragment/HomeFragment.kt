@@ -3,15 +3,11 @@ package com.github.tvbox.osc.ui.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.view.Gravity
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
-import com.angcyo.tablayout.delegate.ViewPager1Delegate.Companion.install
-import com.blankj.utilcode.util.ConvertUtils
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.github.tvbox.osc.R
@@ -40,10 +36,11 @@ import com.github.tvbox.osc.ui.dialog.TipDialog
 import com.github.tvbox.osc.util.DefaultConfig
 import com.github.tvbox.osc.util.HawkConfig
 import com.github.tvbox.osc.viewmodel.SourceViewModel
+import com.google.android.material.tabs.TabLayoutMediator
 import com.lxj.xpopup.XPopup
 import com.orhanobut.hawk.Hawk
-import com.owen.tvrecyclerview.widget.TvRecyclerView
-import com.owen.tvrecyclerview.widget.V7GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -54,7 +51,7 @@ class HomeFragment : BaseVbFragment<FragmentHomeBinding>() {
      * 提供给主页返回操作
      */
     val tabIndex: Int
-        get() = mBinding.tabLayout.currentItemIndex
+        get() = mBinding.tabLayout.selectedTabPosition
 
     /**
      * 提供给主页返回操作
@@ -64,6 +61,8 @@ class HomeFragment : BaseVbFragment<FragmentHomeBinding>() {
 
     private var sourceViewModel: SourceViewModel? = null
     private val fragments: MutableList<BaseLazyFragment> = ArrayList()
+    private val tabTitles: MutableList<String> = ArrayList()
+    private var tabMediator: TabLayoutMediator? = null
     private val mHandler = Handler()
 
     /**
@@ -87,7 +86,7 @@ class HomeFragment : BaseVbFragment<FragmentHomeBinding>() {
             if (dataInitOk && jarInitOk) {
                 showSiteSwitch()
             } else {
-                ToastUtils.showShort("数据源未加载，长按刷新或切换订阅")
+                ToastUtils.showShort(R.string.sources_not_loaded_hint)
             }
         }
         mBinding.nameContainer.setOnLongClickListener {
@@ -139,8 +138,8 @@ class HomeFragment : BaseVbFragment<FragmentHomeBinding>() {
         showLoading()
         when{
             dataInitOk && jarInitOk -> {
-                //正常初始化会先加载,最终到这,此时数据有以下几种情况
-                // 1. api/jar/spider等均加载完,正常显示数据。2. 缺失spider(存疑?)/api配置有问题同样加载(最后空布局 或 只有豆瓣首页)
+            //正常初始化会先加载,最终到这,此时数据有以下几种情况
+            // 1. api/jar/spider等均加载完,正常显示数据。2. 缺失spider(存疑?)/api配置有问题同样加载(最后空布局 或 只有豆瓣首页)
                 sourceViewModel?.getSort(ApiConfig.get().homeSourceBean.key)
             }
             dataInitOk && !jarInitOk -> {
@@ -201,7 +200,7 @@ class HomeFragment : BaseVbFragment<FragmentHomeBinding>() {
                     override fun error(msg: String) {
                         jarInitOk = true
                         mHandler.post {
-                            ToastUtils.showShort("更新订阅失败")
+                            ToastUtils.showShort(R.string.update_subscription_failed)
                             initData()
                         }
                     }
@@ -247,25 +246,12 @@ class HomeFragment : BaseVbFragment<FragmentHomeBinding>() {
         if (!errorTipDialog!!.isShowing) errorTipDialog!!.show()
     }
 
-    private fun getTabTextView(text: String): TextView {
-        val textView = TextView(mContext)
-        textView.text = text
-        textView.gravity = Gravity.CENTER
-        textView.setPadding(
-            ConvertUtils.dp2px(20f),
-            ConvertUtils.dp2px(10f),
-            ConvertUtils.dp2px(5f),
-            ConvertUtils.dp2px(10f)
-        )
-        return textView
-    }
-
     private fun initViewPager(absXml: AbsSortXml?) {
         if (mSortDataList.isNotEmpty()) {
-            mBinding.tabLayout.removeAllViews()
             fragments.clear()
+            tabTitles.clear()
             for (data in mSortDataList) {
-                mBinding.tabLayout.addView(getTabTextView(data.name))
+                tabTitles.add(data.name)
                 if (data.id == "my0") { //tab是主页,添加主页fragment 根据设置项显示豆瓣热门/站点推荐(每个源不一样)/历史记录
                     if (Hawk.get(
                             HawkConfig.HOME_REC,
@@ -281,23 +267,35 @@ class HomeFragment : BaseVbFragment<FragmentHomeBinding>() {
                 }
             }
             if (Hawk.get(HawkConfig.HOME_REC, 0) == 2) { //关闭主页
-                mBinding.tabLayout.removeViewAt(0)
+                tabTitles.removeAt(0)
                 fragments.removeAt(0)
             }
 
-            //重新渲染vp
-            mBinding.mViewPager.adapter =
-                object : FragmentStatePagerAdapter(getChildFragmentManager()) {
-                    override fun getItem(position: Int): Fragment {
-                        return fragments[position]
-                    }
+//重新渲染vp
+            mBinding.mViewPager.adapter = null
+            val fm = childFragmentManager
+            for (fragment in fm.fragments) {
+                fm.beginTransaction().remove(fragment).commitNow()
+            }
 
-                    override fun getCount(): Int {
+
+            mBinding.mViewPager.adapter =
+                object : FragmentStateAdapter(childFragmentManager, lifecycle) {
+                    override fun getItemCount(): Int {
                         return fragments.size
                     }
+
+                    override fun createFragment(position: Int): Fragment {
+                        return fragments[position]
+                    }
                 }
-            //tab和vp绑定
-            install(mBinding.mViewPager, mBinding.tabLayout, true)
+                //tab和vp绑定
+            tabMediator?.detach()
+            val mediator = TabLayoutMediator(mBinding.tabLayout, mBinding.mViewPager) { tab, position ->
+                tab.text = tabTitles[position]
+            }
+            mediator.attach()
+            tabMediator = mediator
         }
     }
 
@@ -305,7 +303,7 @@ class HomeFragment : BaseVbFragment<FragmentHomeBinding>() {
      * 提供给主页返回操作
      */
     fun scrollToFirstTab(): Boolean {
-        return if (mBinding.tabLayout.currentItemIndex != 0) {
+        return if (mBinding.tabLayout.selectedTabPosition != 0) {
             mBinding.mViewPager.setCurrentItem(0, false)
             true
         } else {
@@ -322,9 +320,9 @@ class HomeFragment : BaseVbFragment<FragmentHomeBinding>() {
         val sites = ApiConfig.get().sourceBeanList
         if (sites.size > 0) {
             val dialog = SelectDialog<SourceBean>(requireActivity())
-            val tvRecyclerView = dialog.findViewById<TvRecyclerView>(R.id.list)
-            tvRecyclerView.setLayoutManager(V7GridLayoutManager(dialog.context, 2))
-            dialog.setTip("请选择首页数据源")
+            val tvRecyclerView = dialog.findViewById<RecyclerView>(R.id.list)
+            tvRecyclerView.setLayoutManager(GridLayoutManager(dialog.context, 2))
+            dialog.setTip(getString(R.string.select_home_source))
             dialog.setAdapter(object : SelectDialogInterface<SourceBean?> {
                 override fun click(value: SourceBean?, pos: Int) {
                     ApiConfig.get().setSourceBean(value)
@@ -345,7 +343,7 @@ class HomeFragment : BaseVbFragment<FragmentHomeBinding>() {
             }, sites, sites.indexOf(ApiConfig.get().homeSourceBean))
             dialog.show()
         } else {
-            ToastUtils.showLong("暂无可用数据源")
+            ToastUtils.showLong(R.string.no_available_sources)
         }
     }
 
@@ -376,7 +374,7 @@ class HomeFragment : BaseVbFragment<FragmentHomeBinding>() {
                 vodInfoList
             }
 
-            // 查询完成后更新UI
+// 查询完成后更新UI
             if (vodInfoList.isNotEmpty() && vodInfoList[0] != null) {
                 XPopup.Builder(context)
                     .hasShadowBg(false)

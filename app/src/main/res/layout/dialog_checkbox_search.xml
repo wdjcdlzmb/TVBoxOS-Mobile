@@ -28,7 +28,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:paddingVertical="8dp"
-                android:text="全选"
+                android:text="@string/select_all"
                 android:textColor="@color/text_foreground"
                 android:textStyle="bold"/>
 
@@ -43,7 +43,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:paddingVertical="8dp"
-                android:text="全不选"
+                android:text="@string/select_none"
                 android:textColor="@color/text_foreground"
                 android:textStyle="bold"/>
         </LinearLayout>

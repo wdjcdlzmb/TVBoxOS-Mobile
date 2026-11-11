@@ -46,12 +46,12 @@ public class SubsciptionDialog extends CenterPopupView {
         binding.btnConfirm.setOnClickListener(view -> {
             String name = binding.etName.getText().toString().trim();
             if (name.isEmpty()) {
-                ToastUtils.showShort("请输入名称");
+                ToastUtils.showShort(R.string.input_name);
                 return;
             }
             String url = binding.etUrl.getText().toString().trim();
             if (url.isEmpty()) {
-                ToastUtils.showShort("请输入订阅地址");
+                ToastUtils.showShort(R.string.input_subscription_url);
                 return;
             }
             if (listener != null) {

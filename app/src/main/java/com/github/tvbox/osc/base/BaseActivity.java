@@ -44,9 +44,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import me.jessyan.autosize.internal.CustomAdapt;
-
-public abstract class BaseActivity extends AppCompatActivity implements CustomAdapt, OnTitleBarListener {
+public abstract class BaseActivity extends AppCompatActivity implements OnTitleBarListener {
     protected Context mContext;
     private LoadService mLoadService;
 
@@ -211,16 +209,6 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
             e.printStackTrace();
         }
         return "";
-    }
-
-    @Override
-    public float getSizeInDp() {
-        return isBaseOnWidth() ? 360 : 720;
-    }
-
-    @Override
-    public boolean isBaseOnWidth() {
-        return true;
     }
 
     @Override

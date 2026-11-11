@@ -57,7 +57,7 @@ android:layout_height="wrap_content">
             android:layout_height="@dimen/ts_26"
             android:background="@drawable/shape_setting_model_focus"
             android:gravity="center"
-            android:text="回看"
+            android:text="@string/catchup"
             android:textColor="@color/color_FFFFFF"
             android:textSize="@dimen/dp_15" />
 

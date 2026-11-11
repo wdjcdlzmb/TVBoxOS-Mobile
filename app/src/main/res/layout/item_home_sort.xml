@@ -18,6 +18,6 @@
         android:focusable="false"
         android:gravity="center"
         android:textColor="@color/text_foreground"
-        android:text="首页" />
+        android:text="@string/home" />
 
 </LinearLayout>

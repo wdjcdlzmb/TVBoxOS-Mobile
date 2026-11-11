@@ -21,7 +21,7 @@
         android:ellipsize="marquee"
         android:gravity="center"
         android:marqueeRepeatLimit="marquee_forever"
-        android:text="第210集"
+        android:text="@string/sample_episode"
         android:singleLine="true"
         android:paddingHorizontal="10dp"
         android:paddingVertical="6dp"

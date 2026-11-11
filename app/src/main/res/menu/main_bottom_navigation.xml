@@ -5,12 +5,12 @@
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_home"
         android:orderInCategory="0"
-        android:title="首页"/>
+        android:title="@string/home"/>
 
     <item
         android:id="@+id/navigation_dashboard"
         android:icon="@drawable/ic_my"
         android:orderInCategory="1"
-        android:title="我的"/>
+        android:title="@string/my_tab"/>
 
 </menu>

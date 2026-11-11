@@ -27,7 +27,7 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="订阅提示"
+                android:text="@string/subscription_tip_title"
                 android:textColor="@color/text_foreground"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
@@ -44,7 +44,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="免责说明"
+                android:text="@string/disclaimer"
                 android:textColor="@color/text_foreground"
                 android:textStyle="bold"
                 android:textSize="16sp"
@@ -69,5 +69,5 @@
         android:layout_marginTop="20dp"
         android:textColor="@color/text_foreground"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:text="知道了"/>
+        android:text="@string/got_it"/>
 </LinearLayout>

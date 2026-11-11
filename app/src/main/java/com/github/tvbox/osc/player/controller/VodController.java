@@ -29,6 +29,7 @@ import com.github.tvbox.osc.subtitle.widget.SimpleSubtitleView;
 import com.github.tvbox.osc.ui.adapter.ParseAdapter;
 import com.github.tvbox.osc.ui.adapter.SelectDialogAdapter;
 import com.github.tvbox.osc.ui.dialog.SelectDialog;
+import com.github.tvbox.osc.ui.widget.LinearSpacingItemDecoration;
 import com.github.tvbox.osc.ui.widget.MyBatteryView;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.HawkConfig;
@@ -37,8 +38,8 @@ import com.github.tvbox.osc.util.ScreenUtils;
 import com.github.tvbox.osc.util.SubtitleHelper;
 import com.github.tvbox.osc.util.Utils;
 import com.orhanobut.hawk.Hawk;
-import com.owen.tvrecyclerview.widget.TvRecyclerView;
-import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
@@ -124,7 +125,7 @@ public class VodController extends BaseController {
     LinearLayout mTopRoot1;
     View mTopRoot2;
     LinearLayout mParseRoot;
-    TvRecyclerView mGridView;
+    RecyclerView mGridView;
     TextView mPlayTitle1;
     TextView mPlayLoadNetSpeedRightTop;
     ImageView mNextBtn;
@@ -274,7 +275,8 @@ public class VodController extends BaseController {
             }
         });
 
-        mGridView.setLayoutManager(new V7LinearLayoutManager(getContext(), 0, false));
+        mGridView.setLayoutManager(new LinearLayoutManager(getContext(), 0, false));
+        mGridView.addItemDecoration(new LinearSpacingItemDecoration(20, false));
         mParseAdapter = new ParseAdapter();
         mParseAdapter.setOnItemClickListener((adapter, view, position) -> {
             ParseBean parseBean = mParseAdapter.getItem(position);
@@ -289,7 +291,7 @@ public class VodController extends BaseController {
         mGridView.setAdapter(mParseAdapter);
         mParseAdapter.setNewData(ApiConfig.get().getParseBeanList());
 
-        //mParseRoot.setVisibility(VISIBLE);
+//mParseRoot.setVisibility(VISIBLE);
 
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -445,7 +447,7 @@ public class VodController extends BaseController {
                     }
                 }
                 SelectDialog<Integer> dialog = new SelectDialog<>(mActivity);
-                dialog.setTip("请选择播放器");
+                dialog.setTip(getContext().getString(R.string.select_player));
                 dialog.setAdapter(new SelectDialogAdapter.SelectDialogInterface<Integer>() {
                     @Override
                     public void click(Integer value, int pos) {
@@ -515,7 +517,7 @@ public class VodController extends BaseController {
             mPlayerIJKBtn.requestFocus();
             mPlayerIJKBtn.requestFocusFromTouch();
         });
-//        增加播放页面片头片尾时间重置
+        //        增加播放页面片头片尾时间重置
         mPlayerTimeResetBtn.setOnClickListener(v -> {
             myHandle.removeCallbacks(myRunnable);
             myHandle.postDelayed(myRunnable, dismissTimeOperationBar);
@@ -602,12 +604,12 @@ public class VodController extends BaseController {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                 case MotionEvent.ACTION_MOVE:
-                    // User is scrolling, remove callbacks
+                // User is scrolling, remove callbacks
                     myHandle.removeCallbacks(myRunnable);
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
-                    // User stopped scrolling, post callbacks
+                // User stopped scrolling, post callbacks
                     myHandle.postDelayed(myRunnable, dismissTimeOperationBar);
                     break;
             }
@@ -633,7 +635,7 @@ public class VodController extends BaseController {
             speed_old = speed;
             mControlWrapper.setSpeed(speed);
         } catch (Exception e) {
-            ToastUtils.showShort("倍速参数异常");
+            ToastUtils.showShort(R.string.invalid_speed_param);
             e.printStackTrace();
         }
     }
@@ -663,7 +665,7 @@ public class VodController extends BaseController {
             double screenSqrt = ScreenUtils.getSqrt(mActivity);
             if (screenSqrt < 10.0 && width < height) {
                 mLandscapePortraitBtn.setVisibility(View.VISIBLE);
-                mLandscapePortraitBtn.setText("竖屏");
+                mLandscapePortraitBtn.setText(R.string.portrait);
             }
         }
     }
@@ -690,7 +692,7 @@ public class VodController extends BaseController {
     }
 
     public void showParse(boolean userJxList) {
-        //mParseRoot.setVisibility(userJxList ? VISIBLE : GONE);
+    //mParseRoot.setVisibility(userJxList ? VISIBLE : GONE);
         if (listener!=null && mParseAdapter!=null){
             listener.showParseRoot(userJxList,mParseAdapter);
         }
@@ -1001,10 +1003,10 @@ public class VodController extends BaseController {
     public void openSubtitle(boolean open) {
         if (open) {
             mSubtitleView.setVisibility(VISIBLE);
-            Toast.makeText(getContext(), "字幕已开启", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.subtitle_enabled, Toast.LENGTH_SHORT).show();
         } else {
             mSubtitleView.setVisibility(View.GONE);
-            Toast.makeText(getContext(), "字幕已关闭", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.subtitle_closed, Toast.LENGTH_SHORT).show();
         }
         hideBottom();
     }

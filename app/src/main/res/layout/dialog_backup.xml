@@ -32,7 +32,7 @@
                 android:focusable="true"
                 android:gravity="center"
                 android:padding="@dimen/dp_10"
-                android:text="立即备份"
+                android:text="@string/backup_now"
                 android:textColor="@color/color_FFFFFF"
                 android:textSize="16sp"/>
 
@@ -45,14 +45,14 @@
             android:lineSpacingMultiplier="0"
             android:padding="20dp"
             android:singleLine="true"
-            android:text="点击下方数据还原"
+            android:text="@string/restore_tip"
             android:textColor="@color/text_foreground"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:textStyle="bold"/>
 
-        <com.owen.tvrecyclerview.widget.TvRecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_200"
@@ -63,9 +63,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toTopOf="@id/backup_buttons"
-            app:tv_layoutManager="V7LinearLayoutManager"
-            app:tv_selectedItemIsCentered="true"
-            app:tv_verticalSpacingWithMargins="@dimen/dp_10"
             app:layout_constraintTop_toBottomOf="@+id/restore_tip"
             android:paddingBottom="10dp"
             tools:listitem="@layout/item_stroke_button"

@@ -81,7 +81,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.model.Response;
 import com.orhanobut.hawk.Hawk;
-import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -158,11 +158,11 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
 
     private void initView() {
         mBinding.ivPrivateBrowsing.setVisibility(Hawk.get(HawkConfig.PRIVATE_BROWSING, false) ? View.VISIBLE : View.GONE);
-        mBinding.ivPrivateBrowsing.setOnClickListener(view -> ToastUtils.showShort("当前为无痕浏览"));
+        mBinding.ivPrivateBrowsing.setOnClickListener(view -> ToastUtils.showShort(R.string.private_browsing_active));
         mBinding.previewPlayerPlace.setVisibility(showPreview ? View.VISIBLE : View.GONE);
 
         mBinding.mGridView.setHasFixedSize(true);
-        mBinding.mGridView.setLayoutManager(new V7LinearLayoutManager(this.mContext, 0, false));
+        mBinding.mGridView.setLayoutManager(new LinearLayoutManager(this.mContext, 0, false));
         mBinding.mGridView.addItemDecoration(new LinearSpacingItemDecoration(20, false));
 
         seriesAdapter = new SeriesAdapter(false);
@@ -207,12 +207,12 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
                 String text = mBinding.tvCollect.getText().toString();
                 if ("加入收藏".equals(text)) {
                     RoomDataManger.insertVodCollect(sourceKey, vodInfo);
-                    Toast.makeText(DetailActivity.this, "已加入收藏夹", Toast.LENGTH_SHORT).show();
-                    mBinding.tvCollect.setText("取消收藏");
+                    Toast.makeText(DetailActivity.this, R.string.added_to_favorite, Toast.LENGTH_SHORT).show();
+                    mBinding.tvCollect.setText(R.string.unfavorite);
                 } else {
                     RoomDataManger.deleteVodCollect(sourceKey, vodInfo);
-                    Toast.makeText(DetailActivity.this, "已移除收藏夹", Toast.LENGTH_SHORT).show();
-                    mBinding.tvCollect.setText("加入收藏");
+                    Toast.makeText(DetailActivity.this, R.string.removed_from_favorite, Toast.LENGTH_SHORT).show();
+                    mBinding.tvCollect.setText(R.string.add_favorite);
                 }
             }
         });
@@ -564,9 +564,9 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
             sourceViewModel.getDetail(sourceKey, vodId);
             boolean isVodCollect = RoomDataManger.isVodCollect(sourceKey, vodId);
             if (isVodCollect) {
-                mBinding.tvCollect.setText("取消收藏");
+                mBinding.tvCollect.setText(R.string.unfavorite);
             } else {
-                mBinding.tvCollect.setText("加入收藏");
+                mBinding.tvCollect.setText(R.string.add_favorite);
             }
         }
     }
@@ -851,13 +851,13 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
             } else {
                 // 如果1DM App未安装,提示用户自行安装(不自动打开来路不明的apk下载链接)
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("未安装下载器");
-                builder.setMessage("该功能依赖 1DM+ Download Manager,请自行安装后再试。");
-                builder.setPositiveButton("知道了", null);
+                builder.setTitle(R.string.downloader_missing_title);
+                builder.setMessage(R.string.downloader_missing_msg);
+                builder.setPositiveButton(R.string.got_it, null);
                 builder.show();
             }
         } else {
-            ToastUtils.showShort("资源异常,请稍后重试");
+            ToastUtils.showShort(R.string.resource_error_retry);
         }
     }
 
@@ -1055,7 +1055,7 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
                             try {
                                 startActivity(new Intent().setComponent(new ComponentName(pkg, cls)));
                             }catch (Exception e){
-                                ToastUtils.showShort("未找到应用");
+                                ToastUtils.showShort(R.string.app_not_found);
                             }
                         })
                         .show();

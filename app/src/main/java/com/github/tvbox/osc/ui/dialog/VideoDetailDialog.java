@@ -21,7 +21,6 @@ import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.SmartGlideImageLoader;
 import com.squareup.picasso.Picasso;
 
-import me.jessyan.autosize.utils.AutoSizeUtils;
 
 
 public class VideoDetailDialog extends BottomPopupView {
@@ -62,7 +61,7 @@ public class VideoDetailDialog extends BottomPopupView {
         binding.url.setText(mActivity.getCurrentVodUrl());
         binding.tvLinkCopy.setOnClickListener(view -> {
             ClipboardUtils.copyText(mActivity.getCurrentVodUrl());
-            ToastUtils.showLong("已复制");
+            ToastUtils.showLong(R.string.copied);
         });
         String picUrl = DefaultConfig.checkReplaceProxy(mVideo.pic);
         if (!TextUtils.isEmpty(picUrl)){

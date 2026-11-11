@@ -37,7 +37,7 @@
             android:padding="10dp"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <com.owen.tvrecyclerview.widget.TvRecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,10 +48,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title"
-            app:tv_layoutManager="V7LinearLayoutManager"
-            app:tv_selectedItemIsCentered="true"
-            app:tv_horizontalSpacingWithMargins="@dimen/dp_10"
-            app:tv_verticalSpacingWithMargins="@dimen/dp_10"
             android:paddingBottom="10dp"/>
 
         <View

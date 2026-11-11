@@ -28,7 +28,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.jessyan.autosize.utils.AutoSizeUtils;
 
 public class FolderAdapter extends BaseQuickAdapter<VideoFolder, BaseViewHolder> {
     public FolderAdapter() {
@@ -39,7 +38,7 @@ public class FolderAdapter extends BaseQuickAdapter<VideoFolder, BaseViewHolder>
     protected void convert(BaseViewHolder helper, VideoFolder item) {
         List<VideoInfo> videoList = item.getVideoList();
         helper.setText(R.id.tv_name,item.getName());
-        helper.setText(R.id.tv_count,videoList.size()+"个视频");
+        helper.setText(R.id.tv_count,mContext.getString(R.string.video_count_fmt, videoList.size()));
 
         Glide.with(mContext)
                 .load(videoList.get(0).getPath()) // 第一个视频做封面

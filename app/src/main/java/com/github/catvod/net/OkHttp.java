@@ -10,7 +10,6 @@ import com.github.tvbox.osc.bean.Doh;
 import com.google.common.net.HttpHeaders;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
@@ -124,7 +123,7 @@ public class OkHttp {
     }
 
     private static HttpUrl buildUrl(String url, ArrayMap<String, String> params) {
-        HttpUrl.Builder builder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
+        HttpUrl.Builder builder = HttpUrl.get(url).newBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) builder.addQueryParameter(entry.getKey(), entry.getValue());
         return builder.build();
     }

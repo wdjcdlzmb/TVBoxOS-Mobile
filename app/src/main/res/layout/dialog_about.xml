@@ -20,7 +20,7 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="关于"
+            android:text="@string/about_label"
             android:textColor="@color/text_foreground"
             android:textStyle="bold"
             android:textSize="18sp"/>
@@ -50,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="项目地址"
+        android:text="@string/project_url"
         android:textColor="@color/text_foreground"
         />
 
@@ -65,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="修改自"
+        android:text="@string/modified_from"
         android:textColor="@color/text_foreground"
         />
 

@@ -2,7 +2,5 @@ rootProject.name = "TVBoxMobile"
 include ':app'
 include ':player'
 include ':quickjs'
-include ':TabLayout'
-include ':ViewPager1Delegate'
 include ':dlna-core'
 include ':dlna-dmc'

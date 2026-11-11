@@ -18,7 +18,8 @@ import com.github.tvbox.osc.util.HawkConfig;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.core.DrawerPopupView;
 import com.orhanobut.hawk.Hawk;
-import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import com.github.tvbox.osc.ui.widget.LinearSpacingItemDecoration;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -61,7 +62,8 @@ public class LiveSettingRightDialog extends DrawerPopupView {
 
     private void initSettingGroupView() {
         mBinding.mSettingGroupView.setHasFixedSize(true);
-        mBinding.mSettingGroupView.setLayoutManager(new V7LinearLayoutManager(getContext(), 1, false));
+        mBinding.mSettingGroupView.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
+        mBinding.mSettingGroupView.addItemDecoration(new LinearSpacingItemDecoration(20, true));
 
         liveSettingGroupAdapter = new LiveSettingGroupAdapter();
         mBinding.mSettingGroupView.setAdapter(liveSettingGroupAdapter);
@@ -78,7 +80,8 @@ public class LiveSettingRightDialog extends DrawerPopupView {
 
     private void initSettingItemView() {
         mBinding.mSettingItemView.setHasFixedSize(true);
-        mBinding.mSettingItemView.setLayoutManager(new V7LinearLayoutManager(getContext(), 1, false));
+        mBinding.mSettingItemView.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
+        mBinding.mSettingItemView.addItemDecoration(new LinearSpacingItemDecoration(20, true));
 
         liveSettingItemAdapter = new LiveSettingItemAdapter();
         mBinding.mSettingItemView.setAdapter(liveSettingItemAdapter);

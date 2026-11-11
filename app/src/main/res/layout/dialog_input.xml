@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/tv_title"
-        android:text="提示"
+        android:text="@string/tip"
         android:textColor="@color/text_foreground"
         android:layout_width="wrap_content"
         android:textSize="16sp"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:layout_marginTop="10dp"
-            android:hint="请输入..."
+            android:hint="@string/input_hint"
             android:inputType="textUri"
             android:textColor="@color/text_foreground"
             android:textColorHint="@color/text_sub_foreground"
@@ -63,7 +63,7 @@
             android:insetBottom="0dp"
             android:layout_height="33dp"
             android:layout_marginRight="20dp"
-            android:text="取 消"
+            android:text="@string/btn_cancel_spaced"
             android:textColor="@color/text_sub_foreground"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
@@ -76,7 +76,7 @@
             android:layout_height="33dp"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             app:strokeColor="@color/colorPrimary"
-            android:text="确 定"/>
+            android:text="@string/btn_confirm_spaced"/>
 
     </LinearLayout>
 </LinearLayout>

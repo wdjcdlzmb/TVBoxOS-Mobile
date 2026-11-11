@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
-            android:text="源名称"
+            android:text="@string/source_name"
             android:textColor="@color/text_foreground"
             android:button="@drawable/button_checkbox"
             android:padding="8dp"

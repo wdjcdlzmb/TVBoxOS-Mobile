@@ -13,8 +13,9 @@ import com.github.tvbox.osc.bean.Movie;
 import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.ui.adapter.QuickSearchAdapter;
 import com.github.tvbox.osc.ui.adapter.SearchWordAdapter;
-import com.owen.tvrecyclerview.widget.TvRecyclerView;
-import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.github.tvbox.osc.ui.widget.LinearSpacingItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,8 +28,8 @@ import java.util.List;
 public class QuickSearchDialog extends BaseDialog {
     private SearchWordAdapter searchWordAdapter;
     private QuickSearchAdapter searchAdapter;
-    private TvRecyclerView mGridView;
-    private TvRecyclerView mGridViewWord;
+    private RecyclerView mGridView;
+    private RecyclerView mGridViewWord;
     List<Movie.Video> results = new ArrayList<>();
 
     public QuickSearchDialog(@NonNull @NotNull Context context) {
@@ -67,9 +68,10 @@ public class QuickSearchDialog extends BaseDialog {
         searchAdapter = new QuickSearchAdapter();
         mGridView.setHasFixedSize(true);
         // lite
-        mGridView.setLayoutManager(new V7LinearLayoutManager(getContext(), 1, false));
+        mGridView.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
+        mGridView.addItemDecoration(new LinearSpacingItemDecoration(20, true));
         // with preview
-        // mGridView.setLayoutManager(new V7GridLayoutManager(getContext(), 3));
+        // mGridView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mGridView.setAdapter(searchAdapter);
         searchAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -84,7 +86,7 @@ public class QuickSearchDialog extends BaseDialog {
         searchWordAdapter = new SearchWordAdapter();
         mGridViewWord = findViewById(R.id.mGridViewWord);
         mGridViewWord.setAdapter(searchWordAdapter);
-        mGridViewWord.setLayoutManager(new V7LinearLayoutManager(context, 0, false));
+        mGridViewWord.setLayoutManager(new LinearLayoutManager(context, 0, false));
         searchWordAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

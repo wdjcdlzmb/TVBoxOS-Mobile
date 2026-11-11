@@ -12,26 +12,22 @@
     android:gravity="center_horizontal"
     >
 
-    <com.owen.tvrecyclerview.widget.TvRecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mSettingGroupView"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
         android:padding="20dp"
-        android:gravity= "center"
-        app:tv_selectedItemIsCentered="true"
-        app:tv_verticalSpacingWithMargins="10dp" />
+        android:gravity= "center" />
 
 
-    <com.owen.tvrecyclerview.widget.TvRecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mSettingItemView"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
         android:padding="20dp"
         android:visibility="visible"
-        android:gravity= "center"
-        app:tv_selectedItemIsCentered="true"
-        app:tv_verticalSpacingWithMargins="10dp" />
+        android:gravity= "center" />
 
 </LinearLayout>

@@ -30,7 +30,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10秒"
+            android:text="@string/ten_seconds"
             android:textColor="@color/white"
             android:textSize="12sp" />
     </LinearLayout>
@@ -57,7 +57,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10秒"
+            android:text="@string/ten_seconds"
             android:textColor="@color/white"
             android:textSize="12sp" />
     </LinearLayout>
@@ -253,19 +253,16 @@
                 android:layout_marginEnd="@dimen/dp_5"
                 android:layout_marginRight="@dimen/dp_5"
                 android:paddingRight="@dimen/dp_10"
-                android:text="解析"
+                android:text="@string/parse"
                 android:textColor="@color/color_FFFFFF"
                  />
 
-            <com.owen.tvrecyclerview.widget.TvRecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/mGridView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipChildren="false"
-                android:clipToPadding="false"
-                app:tv_horizontalSpacingWithMargins="@dimen/dp_5"
-                app:tv_selectedItemIsCentered="true"
-                app:tv_verticalSpacingWithMargins="@dimen/dp_5" />
+                android:clipToPadding="false" />
         </LinearLayout>
 
         <LinearLayout
@@ -357,7 +354,7 @@
                 android:textColor="@color/white"
                 android:visibility="gone"
                 tools:visibility="visible"
-                android:text="选集"
+                android:text="@string/episode_selection"
                 android:textSize="16sp"
                 android:layout_marginLeft="4dp"
                 />
@@ -394,7 +391,7 @@
                         android:focusable="true"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="4dp"
-                        android:text="重播"
+                        android:text="@string/replay"
                         android:textColor="@color/white"
                         android:layout_marginLeft="20dp"
                         />
@@ -408,7 +405,7 @@
                         android:focusable="true"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="4dp"
-                        android:text="刷新"
+                        android:text="@string/refresh"
                         android:textColor="@color/white"
                         />
                     <TextView
@@ -450,7 +447,7 @@
                         android:focusable="true"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="4dp"
-                        android:text="系统"
+                        android:text="@string/system"
                         />
 
                     <TextView
@@ -464,7 +461,7 @@
                         android:focusable="true"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="4dp"
-                        android:text="硬解码"
+                        android:text="@string/hw_decode"
                         />
 
                     <TextView
@@ -476,7 +473,7 @@
                         android:layout_marginRight="@dimen/dp_5"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="4dp"
-                        android:text="片头/片尾"
+                        android:text="@string/intro_outro"
                         android:textColor="@color/white"
                         />
 
@@ -520,7 +517,7 @@
                         android:focusable="true"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="4dp"
-                        android:text="重置"
+                        android:text="@string/reset"
                         />
 
                     <TextView
@@ -534,7 +531,7 @@
                         android:focusable="true"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="4dp"
-                        android:text="字幕"
+                        android:text="@string/subtitle"
                         />
 
                     <TextView
@@ -548,7 +545,7 @@
                         android:focusable="true"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="4dp"
-                        android:text="音轨"
+                        android:text="@string/audio_track"
                         />
 
                     <TextView
@@ -562,7 +559,7 @@
                         android:focusable="true"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="4dp"
-                        android:text="横竖屏"
+                        android:text="@string/orientation"
                         android:visibility="gone"
                         />
 

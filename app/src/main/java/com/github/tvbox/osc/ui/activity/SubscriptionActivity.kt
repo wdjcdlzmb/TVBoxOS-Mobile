@@ -71,7 +71,7 @@ class SubscriptionActivity : BaseVbActivity<ActivitySubscriptionBinding>() {
                             ) { //只有addSub2List用到,看注释,单线路才生效,其余方法仅作为参数继续传递
                                 for (item in mSubscriptions) {
                                     if (item.url == url) {
-                                        ToastUtils.showLong("订阅地址与" + item.name + "相同")
+                                        ToastUtils.showLong(getString(R.string.subscription_addr_duplicate_fmt, item.name))
                                         return
                                     }
                                 }
@@ -97,11 +97,11 @@ class SubscriptionActivity : BaseVbActivity<ActivitySubscriptionBinding>() {
             LogUtils.d("删除订阅")
             if (view.id == R.id.iv_del) {
                 if (mSubscriptions.get(position).isChecked) {
-                    ToastUtils.showShort("不能删除当前使用的订阅")
+                    ToastUtils.showShort(R.string.cannot_delete_active_subscription)
                     return@setOnItemChildClickListener
                 }
                 XPopup.Builder(this@SubscriptionActivity)
-                    .asConfirm("删除订阅", "确定删除订阅吗？") {
+                    .asConfirm(getString(R.string.delete_subscription), getString(R.string.confirm_delete_subscription)) {
                         mSubscriptions.removeAt(position)
                         //删除/选择只刷新,不触发重新排序
                         mSubscriptionAdapter.notifyDataSetChanged()
@@ -152,7 +152,7 @@ class SubscriptionActivity : BaseVbActivity<ActivitySubscriptionBinding>() {
                                         { text ->
                                             if (!TextUtils.isEmpty(text)) {
                                                 if (text.trim { it <= ' ' }.length > 8) {
-                                                    ToastUtils.showShort("不要过长,不方便记忆")
+                                                    ToastUtils.showShort(R.string.remark_too_long)
                                                 } else {
                                                     item.name = text.trim { it <= ' ' }
                                                     mSubscriptionAdapter.notifyItemChanged(position)
@@ -165,7 +165,7 @@ class SubscriptionActivity : BaseVbActivity<ActivitySubscriptionBinding>() {
                             }
                             2 -> {
                                 ClipboardUtils.copyText(mSubscriptions.get(position).url)
-                                ToastUtils.showLong("已复制")
+                                ToastUtils.showLong(R.string.copied)
                             }
                         }
                     }.show()
@@ -176,7 +176,7 @@ class SubscriptionActivity : BaseVbActivity<ActivitySubscriptionBinding>() {
     private fun showPermissionTipPopup(checked: Boolean) {
         XPopup.Builder(this@SubscriptionActivity)
             .isDarkTheme(Utils.isDarkTheme())
-            .asConfirm("提示", "这将访问您设备文件的读取权限") {
+            .asConfirm(getString(R.string.tip), getString(R.string.storage_read_permission_note)) {
                 XXPermissions.with(this)
                     .permission(Permission.MANAGE_EXTERNAL_STORAGE)
                     .request(object : OnPermissionCallback {
@@ -184,20 +184,20 @@ class SubscriptionActivity : BaseVbActivity<ActivitySubscriptionBinding>() {
                             if (all) {
                                 pickFile(checked)
                             } else {
-                                ToastUtils.showLong("部分权限未正常授予,请授权")
+                                ToastUtils.showLong(R.string.partial_permission_denied)
                             }
                         }
 
                         override fun onDenied(permissions: List<String>, never: Boolean) {
                             if (never) {
-                                ToastUtils.showLong("读写文件权限被永久拒绝，请手动授权")
+                                ToastUtils.showLong(R.string.storage_perm_blocked_manual)
                                 // 如果是被永久拒绝就跳转到应用权限系统设置页面
                                 XXPermissions.startPermissionActivity(
                                     this@SubscriptionActivity,
                                     permissions
                                 )
                             } else {
-                                ToastUtils.showShort("获取权限失败")
+                                ToastUtils.showShort(R.string.permission_request_failed)
                                 showPermissionTipPopup(checked)
                             }
                         }
@@ -223,7 +223,7 @@ class SubscriptionActivity : BaseVbActivity<ActivitySubscriptionBinding>() {
                     pathFile.absolutePath.replace("/storage/emulated/0", "clan://localhost")
                 for (item in mSubscriptions) {
                     if (item.url == clanPath) {
-                        ToastUtils.showLong("订阅地址与" + item.name + "相同")
+                        ToastUtils.showLong(getString(R.string.subscription_addr_duplicate_fmt, item.name))
                         return@Result
                     }
                 }
@@ -252,7 +252,7 @@ class SubscriptionActivity : BaseVbActivity<ActivitySubscriptionBinding>() {
                             val storeHouse = json["storeHouse"]
                             if (urls != null && urls.isJsonArray) { // 多线路
                                 if (checked) {
-                                    ToastUtils.showLong("多条线路请主动选择")
+                                    ToastUtils.showLong(R.string.choose_line_manually)
                                 }
                                 val urlList = urls.asJsonArray
                                 if (urlList != null && urlList.size() > 0 && urlList[0].isJsonObject
@@ -287,7 +287,7 @@ class SubscriptionActivity : BaseVbActivity<ActivitySubscriptionBinding>() {
                                                 this@SubscriptionActivity,
                                                 mSources
                                             ) { position: Int, _: String? ->
-                                                // 再根据多线路格式获取配置,如果仓内是正常多线路模式,name没用,直接使用线路的命名
+                                            // 再根据多线路格式获取配置,如果仓内是正常多线路模式,name没用,直接使用线路的命名
                                                 addSubscription(
                                                     mSources[position].sourceName,
                                                     mSources[position].sourceUrl,
@@ -307,17 +307,17 @@ class SubscriptionActivity : BaseVbActivity<ActivitySubscriptionBinding>() {
 
                     @Throws(Throwable::class)
                     override fun convertResponse(response: okhttp3.Response): String {
-                        return response.body()!!.string()
+                        return response.body!!.string()
                     }
 
                     override fun onError(response: Response<String?>) {
                         super.onError(response)
                         dismissLoadingDialog()
-                        ToastUtils.showLong("订阅失败,请检查地址或网络状态")
+                        ToastUtils.showLong(R.string.subscribe_failed_check)
                     }
                 })
         } else {
-            ToastUtils.showShort("订阅格式不正确")
+            ToastUtils.showShort(R.string.subscribe_format_invalid)
         }
     }
 
@@ -349,7 +349,7 @@ class SubscriptionActivity : BaseVbActivity<ActivitySubscriptionBinding>() {
     }
 
     override fun finish() {
-        //切换了订阅地址
+    //切换了订阅地址
         if (!TextUtils.isEmpty(mSelectedUrl) && mBeforeUrl != mSelectedUrl) {
             val intent = Intent(this, MainActivity::class.java)
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)

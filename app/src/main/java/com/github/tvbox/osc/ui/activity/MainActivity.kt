@@ -20,7 +20,10 @@ class MainActivity : BaseVbActivity<ActivityMainBinding>() {
 
         useCacheConfig = intent.extras?.getBoolean(IntentKey.CACHE_CONFIG_CHANGED, false)?:false
 
-        mBinding.vp.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
+        // 仅当前页走到onResume:切到"我的"时触发继续观看刷新(订阅源此刻已加载完成)
+        mBinding.vp.adapter = object : FragmentPagerAdapter(
+            supportFragmentManager, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+        ) {
             override fun getItem(position: Int): Fragment {
                 return fragments[position]
             }

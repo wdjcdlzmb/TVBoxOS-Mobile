@@ -14,7 +14,7 @@
 
         <TextView
             android:id="@+id/tv_title"
-            android:text="直播源"
+            android:text="@string/live_source"
             android:textColor="@color/text_foreground"
             android:layout_width="wrap_content"
             android:textSize="16sp"
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:layout_marginTop="10dp"
-            android:hint="清空则跟随订阅"
+            android:hint="@string/clear_follow_sub"
             android:ellipsize="middle"
             android:singleLine="true"
             android:textColor="@color/text_foreground"
@@ -66,7 +66,7 @@
             android:insetBottom="0dp"
             android:layout_height="33dp"
             android:layout_marginRight="20dp"
-            android:text="取 消"
+            android:text="@string/btn_cancel_spaced"
             android:textColor="@color/text_sub_foreground"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
@@ -79,7 +79,7 @@
             android:layout_height="33dp"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             app:strokeColor="@color/colorPrimary"
-            android:text="设 置"/>
+            android:text="@string/btn_settings_spaced"/>
 
     </LinearLayout>
 </LinearLayout>

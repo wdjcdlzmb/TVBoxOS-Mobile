@@ -63,8 +63,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.model.Response;
 import com.orhanobut.hawk.Hawk;
-import com.owen.tvrecyclerview.widget.TvRecyclerView;
-import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -96,8 +95,8 @@ public class LiveActivity extends BaseActivity {
     public LiveChannelItemNewAdapter liveChannelItemAdapter;
 
     private LinearLayout tvRightSettingLayout;
-    private TvRecyclerView mSettingGroupView;
-    private TvRecyclerView mSettingItemView;
+    private RecyclerView mSettingGroupView;
+    private RecyclerView mSettingItemView;
     private LiveSettingGroupAdapter liveSettingGroupAdapter;
     private LiveSettingItemAdapter liveSettingItemAdapter;
     private List<LiveSettingGroup> liveSettingGroupList = new ArrayList<>();
@@ -397,7 +396,7 @@ public class LiveActivity extends BaseActivity {
     private Runnable mFocusAndShowSettingGroup = new Runnable() {
         @Override
         public void run() {
-            if (mSettingGroupView.isScrolling() || mSettingItemView.isScrolling() || mSettingGroupView.isComputingLayout() || mSettingItemView.isComputingLayout()) {
+            if (mSettingGroupView.getScrollState() != RecyclerView.SCROLL_STATE_IDLE || mSettingItemView.getScrollState() != RecyclerView.SCROLL_STATE_IDLE || mSettingGroupView.isComputingLayout() || mSettingItemView.isComputingLayout()) {
                 mHandler.postDelayed(this, 100);
             } else {
                 RecyclerView.ViewHolder holder = mSettingGroupView.findViewHolderForAdapterPosition(0);
@@ -557,7 +556,7 @@ public class LiveActivity extends BaseActivity {
 
     private void initChannelGroupView() {
         mChannelGroupView.setHasFixedSize(true);
-        mChannelGroupView.setLayoutManager(new V7LinearLayoutManager(this.mContext, 1, false));
+        mChannelGroupView.setLayoutManager(new LinearLayoutManager(this.mContext, 1, false));
 
         liveChannelGroupAdapter = new LiveChannelGroupNewAdapter();
         mChannelGroupView.setAdapter(liveChannelGroupAdapter);
@@ -589,7 +588,7 @@ public class LiveActivity extends BaseActivity {
 
     private void initLiveChannelView() {
         mLiveChannelView.setHasFixedSize(true);
-        mLiveChannelView.setLayoutManager(new V7LinearLayoutManager(this.mContext, 1, false));
+        mLiveChannelView.setLayoutManager(new LinearLayoutManager(this.mContext, 1, false));
 
         liveChannelItemAdapter = new LiveChannelItemNewAdapter();
         mLiveChannelView.setAdapter(liveChannelItemAdapter);
@@ -610,7 +609,8 @@ public class LiveActivity extends BaseActivity {
 
     private void initSettingGroupView() {
         mSettingGroupView.setHasFixedSize(true);
-        mSettingGroupView.setLayoutManager(new V7LinearLayoutManager(this.mContext, 1, false));
+        mSettingGroupView.setLayoutManager(new LinearLayoutManager(this.mContext, 1, false));
+        mSettingGroupView.addItemDecoration(new LinearSpacingItemDecoration(20, true));
 
         liveSettingGroupAdapter = new LiveSettingGroupAdapter();
         mSettingGroupView.setAdapter(liveSettingGroupAdapter);
@@ -664,7 +664,8 @@ public class LiveActivity extends BaseActivity {
 
     private void initSettingItemView() {
         mSettingItemView.setHasFixedSize(true);
-        mSettingItemView.setLayoutManager(new V7LinearLayoutManager(this.mContext, 1, false));
+        mSettingItemView.setLayoutManager(new LinearLayoutManager(this.mContext, 1, false));
+        mSettingItemView.addItemDecoration(new LinearSpacingItemDecoration(20, true));
 
         liveSettingItemAdapter = new LiveSettingItemAdapter();
         mSettingItemView.setAdapter(liveSettingItemAdapter);
@@ -740,7 +741,7 @@ public class LiveActivity extends BaseActivity {
     private void initLiveChannelList() {
         List<LiveChannelGroup> list = ApiConfig.get().getChannelGroupList();
         if (list.isEmpty()) {
-            Toast.makeText(App.getInstance(), "频道列表为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(App.getInstance(), R.string.channel_list_empty, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -761,7 +762,7 @@ public class LiveActivity extends BaseActivity {
             Uri parsedUrl = Uri.parse(url);
             url = new String(Base64.decode(parsedUrl.getQueryParameter("ext"), Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP), "UTF-8");
         } catch (Throwable th) {
-            Toast.makeText(App.getInstance(), "频道列表为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(App.getInstance(), R.string.channel_list_empty, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -783,7 +784,7 @@ public class LiveActivity extends BaseActivity {
                 ApiConfig.get().loadLives(livesArray);
                 List<LiveChannelGroup> list = ApiConfig.get().getChannelGroupList();
                 if (list.isEmpty()) {
-                    Toast.makeText(App.getInstance(), "频道列表为空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(App.getInstance(), R.string.channel_list_empty, Toast.LENGTH_SHORT).show();
                     finish();
                     return;
                 }
@@ -893,7 +894,7 @@ public class LiveActivity extends BaseActivity {
                     channelGroupPasswordConfirmed.add(groupIndex);
                     loadChannelGroupDataAndPlay(groupIndex, liveChannelIndex);
                 } else {
-                    Toast.makeText(App.getInstance(), "密码错误", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(App.getInstance(), R.string.password_error, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1002,7 +1003,7 @@ public class LiveActivity extends BaseActivity {
 
     private boolean isCurrentLiveChannelValid() {
         if (currentLiveChannelItem == null) {
-            Toast.makeText(App.getInstance(), "请先选择频道", Toast.LENGTH_SHORT).show();
+            Toast.makeText(App.getInstance(), R.string.select_channel_first, Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -1126,7 +1127,7 @@ public class LiveActivity extends BaseActivity {
      */
     private void showSettingDialog(boolean fullScreenStyle) {
         if (!isCurrentLiveChannelValid()){
-            ToastUtils.showShort("当前频道未加载");
+            ToastUtils.showShort(R.string.channel_not_loaded);
             return;
         }
         if (fullScreenStyle){

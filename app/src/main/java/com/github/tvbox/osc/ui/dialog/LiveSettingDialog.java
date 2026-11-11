@@ -16,7 +16,7 @@ import com.github.tvbox.osc.databinding.DialogLiveSettingBinding;
 import com.github.tvbox.osc.ui.activity.LiveActivity;
 import com.github.tvbox.osc.ui.adapter.LiveSettingGroupAdapter;
 import com.github.tvbox.osc.ui.adapter.LiveSettingItemAdapter;
-import com.github.tvbox.osc.ui.widget.GridSpacingItemDecoration;
+import com.github.tvbox.osc.ui.widget.LinearSpacingItemDecoration;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.Utils;
@@ -25,7 +25,7 @@ import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.enums.PopupPosition;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.orhanobut.hawk.Hawk;
-import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -68,7 +68,8 @@ public class LiveSettingDialog extends BottomPopupView {
 
     private void initSettingGroupView() {
         mBinding.mSettingGroupView.setHasFixedSize(true);
-        mBinding.mSettingGroupView.setLayoutManager(new V7LinearLayoutManager(getContext(), 1, false));
+        mBinding.mSettingGroupView.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
+        mBinding.mSettingGroupView.addItemDecoration(new LinearSpacingItemDecoration(20, true));
 
         liveSettingGroupAdapter = new LiveSettingGroupAdapter();
         mBinding.mSettingGroupView.setAdapter(liveSettingGroupAdapter);
@@ -85,7 +86,8 @@ public class LiveSettingDialog extends BottomPopupView {
 
     private void initSettingItemView() {
         mBinding.mSettingItemView.setHasFixedSize(true);
-        mBinding.mSettingItemView.setLayoutManager(new V7LinearLayoutManager(getContext(), 1, false));
+        mBinding.mSettingItemView.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
+        mBinding.mSettingItemView.addItemDecoration(new LinearSpacingItemDecoration(20, true));
 
         liveSettingItemAdapter = new LiveSettingItemAdapter();
         mBinding.mSettingItemView.setAdapter(liveSettingItemAdapter);

@@ -22,13 +22,10 @@ import com.kingja.loadsir.core.LoadSir;
 
 import java.util.List;
 
-import me.jessyan.autosize.AutoSize;
-import me.jessyan.autosize.internal.CustomAdapt;
-
 /**
  * Fragment的基类(懒加载)
  */
-public abstract class BaseLazyFragment extends Fragment implements CustomAdapt {
+public abstract class BaseLazyFragment extends Fragment {
     /**
      * Fragment生命周期 onAttach -> onCreate -> onCreatedView -> onActivityCreated
      * -> onStart -> onResume -> onPause -> onStop -> onDestroyView -> onDestroy
@@ -65,7 +62,6 @@ public abstract class BaseLazyFragment extends Fragment implements CustomAdapt {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        AutoSize.autoConvertDensity(getActivity(), getSizeInDp(), isBaseOnWidth());
         if (null == rootView) {
             rootView = inflater.inflate(getLayoutResID(), container, false);
         }
@@ -198,7 +194,6 @@ public abstract class BaseLazyFragment extends Fragment implements CustomAdapt {
      */
     @Override
     public void onResume() {
-        AutoSize.autoConvertDensity(getActivity(), getSizeInDp(), isBaseOnWidth());
         super.onResume();
         // 如果不是第一次可见
         if (!mIsFirstVisible) {
@@ -291,20 +286,5 @@ public abstract class BaseLazyFragment extends Fragment implements CustomAdapt {
         intent.putExtras(bundle);
         startActivity(intent);
     }
-
-    @Override
-    public float getSizeInDp() {
-        if (getActivity() != null && getActivity() instanceof CustomAdapt)
-            return ((CustomAdapt) getActivity()).getSizeInDp();
-        return 0;
-    }
-
-    @Override
-    public boolean isBaseOnWidth() {
-        if (getActivity() != null && getActivity() instanceof CustomAdapt)
-            return ((CustomAdapt) getActivity()).isBaseOnWidth();
-        return true;
-    }
-
 
 }

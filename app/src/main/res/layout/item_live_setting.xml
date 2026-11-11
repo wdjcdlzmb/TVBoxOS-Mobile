@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/tvSettingItemName"
-        android:layout_width="0mm"
+        android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_weight="1"
         android:ellipsize="marquee"

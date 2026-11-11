@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.Gravity
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.angcyo.tablayout.DslTabLayout
 import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.KeyboardUtils
 import com.blankj.utilcode.util.LogUtils
@@ -37,6 +35,7 @@ import com.github.tvbox.osc.util.FastClickCheckUtil
 import com.github.tvbox.osc.util.HawkConfig
 import com.github.tvbox.osc.util.SearchHelper
 import com.github.tvbox.osc.viewmodel.SourceViewModel
+import com.google.android.material.tabs.TabLayout
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -113,12 +112,15 @@ class FastSearchActivity : BaseVbActivity<ActivityFastSearchBinding>(), TextWatc
         mBinding.ivSearch.setOnClickListener {
             search(mBinding.etSearch.text.toString())
         }
-        mBinding.tabLayout.configTabLayoutConfig {
-            onSelectViewChange  = { _, selectViewList, _, _ ->
-                    val tvItem: TextView = selectViewList.first() as TextView
-                    filterResult(tvItem.text.toString())
-                }
-        }
+        mBinding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                filterResult(tab.text?.toString() ?: return)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
         mBinding.mGridView.setHasFixedSize(true)
         mBinding.mGridView.setLayoutManager(LinearLayoutManager(this))
         mBinding.mGridView.adapter = searchAdapter
@@ -195,7 +197,7 @@ class FastSearchActivity : BaseVbActivity<ActivityFastSearchBinding>(), TextWatc
     }
 
     private fun filterResult(spName: String) {
-        if (spName === "全部显示") {
+        if (spName == "全部显示") {
             mBinding.mGridView.visibility = View.VISIBLE
             mBinding.mGridViewFilter.visibility = View.GONE
             return
@@ -304,7 +306,7 @@ class FastSearchActivity : BaseVbActivity<ActivityFastSearchBinding>(), TextWatc
 
                     @Throws(Throwable::class)
                     override fun convertResponse(response: Response): String {
-                        return response.body()!!.string()
+                        return response.body!!.string()
                     }
                 })
         }
@@ -335,7 +337,7 @@ class FastSearchActivity : BaseVbActivity<ActivityFastSearchBinding>(), TextWatc
 
                 @Throws(Throwable::class)
                 override fun convertResponse(response: Response): String {
-                    return response.body()!!.string()
+                    return response.body!!.string()
                 }
             })
     }
@@ -404,7 +406,7 @@ class FastSearchActivity : BaseVbActivity<ActivityFastSearchBinding>(), TextWatc
 
     private fun search(title: String?) {
         if (title.isNullOrEmpty()) {
-            ToastUtils.showShort("请输入搜索内容")
+            ToastUtils.showShort(R.string.input_search_content)
             return
         }
 
@@ -433,24 +435,12 @@ class FastSearchActivity : BaseVbActivity<ActivityFastSearchBinding>(), TextWatc
         searchFilterKey = ""
         isFilterMode = false
         spNames.clear()
-        mBinding.tabLayout.removeAllViews()
+        mBinding.tabLayout.removeAllTabs()
         searchResult()
     }
 
     private var searchExecutorService: ExecutorService? = null
     private val allRunCount = AtomicInteger(0)
-    private fun getSiteTextView(text: String): TextView {
-        val textView = TextView(this)
-        textView.text = text
-        textView.gravity = Gravity.CENTER
-        val params = DslTabLayout.LayoutParams(-2, -2)
-        params.topMargin = 20
-        params.bottomMargin = 20
-        textView.setPadding(20, 10, 20, 10)
-        textView.layoutParams = params
-        return textView
-    }
-
     private fun searchResult() {
         try {
             if (searchExecutorService != null) {
@@ -472,8 +462,8 @@ class FastSearchActivity : BaseVbActivity<ActivityFastSearchBinding>(), TextWatc
         searchRequestList.remove(home)
         searchRequestList.add(0, home)
         val siteKey = ArrayList<String>()
-        mBinding.tabLayout.addView(getSiteTextView("全部显示"))
-        mBinding.tabLayout.setCurrentItem(0, true, false)
+        mBinding.tabLayout.addTab(mBinding.tabLayout.newTab().setText(R.string.show_all))
+        mBinding.tabLayout.getTabAt(0)?.select()
         for (bean: SourceBean in searchRequestList) {
             if (!bean.isSearchable) {
                 continue
@@ -509,13 +499,13 @@ class FastSearchActivity : BaseVbActivity<ActivityFastSearchBinding>(), TextWatc
                 }
             }
             if ((name == "")) return key
-            for (i in 0 until mBinding.tabLayout.childCount) {
-                val item = mBinding.tabLayout.getChildAt(i) as TextView
-                if ((name == item.text.toString())) {
+            for (i in 0 until mBinding.tabLayout.tabCount) {
+                val tab = mBinding.tabLayout.getTabAt(i) ?: continue
+                if ((name == tab.text?.toString())) {
                     return key
                 }
             }
-            mBinding.tabLayout.addView(getSiteTextView(name))
+            mBinding.tabLayout.addTab(mBinding.tabLayout.newTab().setText(name))
             return key
         } catch (e: Exception) {
             return key
@@ -610,7 +600,7 @@ class FastSearchActivity : BaseVbActivity<ActivityFastSearchBinding>(), TextWatc
                         it.title == text
                     }
                     if (filterList.isEmpty()){
-                        ToastUtils.showShort("暂无评分信息")
+                        ToastUtils.showShort(R.string.no_rating_info)
                         return
                     }
 

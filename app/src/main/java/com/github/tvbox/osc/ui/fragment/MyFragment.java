@@ -67,7 +67,7 @@ public class MyFragment extends BaseVbFragment<FragmentMyBinding> {
 
         mBinding.addrPlay.setOnClickListener(v ->{
             new XPopup.Builder(getContext())
-                    .asInputConfirm("播放", "", isPush(ClipboardUtils.getText().toString())?ClipboardUtils.getText():"", "地址", text -> {
+                    .asInputConfirm(getString(R.string.play), "", isPush(ClipboardUtils.getText().toString())?ClipboardUtils.getText():"", getString(R.string.address), text -> {
                         if (!TextUtils.isEmpty(text)){
                             Intent newIntent = new Intent(mContext, DetailActivity.class);
                             newIntent.putExtra("id", text);
@@ -134,7 +134,7 @@ public class MyFragment extends BaseVbFragment<FragmentMyBinding> {
     private void showPermissionTipPopup(){
         new XPopup.Builder(mActivity)
                 .isDarkTheme(Utils.isDarkTheme())
-                .asConfirm("提示","为了播放视频、音频等,我们需要访问您设备文件的读写权限", () -> {
+                .asConfirm(getString(R.string.tip),getString(R.string.storage_rw_permission_note), () -> {
                     getPermission();
                 }).show();
     }
@@ -148,18 +148,18 @@ public class MyFragment extends BaseVbFragment<FragmentMyBinding> {
                         if (all) {
                             jumpActivity(MovieFoldersActivity.class);
                         }else {
-                            ToastUtils.showLong("部分权限未正常授予,请授权");
+                            ToastUtils.showLong(R.string.partial_permission_denied);
                         }
                     }
 
                     @Override
                     public void onDenied(List<String> permissions, boolean never) {
                         if (never) {
-                            ToastUtils.showLong("读写文件权限被永久拒绝，请手动授权");
+                            ToastUtils.showLong(R.string.storage_perm_blocked_manual);
                             // 如果是被永久拒绝就跳转到应用权限系统设置页面
                             XXPermissions.startPermissionActivity(mActivity, permissions);
                         } else {
-                            ToastUtils.showShort("获取权限失败");
+                            ToastUtils.showShort(R.string.permission_request_failed);
                             showPermissionTipPopup();
                         }
                     }
