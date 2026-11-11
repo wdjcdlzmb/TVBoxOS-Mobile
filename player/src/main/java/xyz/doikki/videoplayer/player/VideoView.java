@@ -333,11 +333,21 @@ public class VideoView<P extends AbstractPlayer> extends FrameLayout
     public void pause() {
         if (isInPlaybackState()
                 && mMediaPlayer.isPlaying()) {
-            mMediaPlayer.pause();
-            setPlayState(STATE_PAUSED);
+            pauseKeepFocus();
             if (mAudioFocusHelper != null && !isMute()) {
                 mAudioFocusHelper.abandonFocus();
             }
+        }
+    }
+
+    /**
+     * 暂停但保留焦点注册,供焦点暂时丢失时使用,GAIN 回调才能自动恢复
+     */
+    void pauseKeepFocus() {
+        if (isInPlaybackState()
+                && mMediaPlayer.isPlaying()) {
+            mMediaPlayer.pause();
+            setPlayState(STATE_PAUSED);
             mPlayerContainer.setKeepScreenOn(false);
         }
     }

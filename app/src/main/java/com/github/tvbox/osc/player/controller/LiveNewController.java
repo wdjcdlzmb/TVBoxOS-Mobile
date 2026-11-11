@@ -15,8 +15,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class LiveNewController extends BaseController {
     protected ProgressBar mLoading;
-    private int minFlingDistance = 100;             //最小识别距离
-    private int minFlingVelocity = 10;              //最小识别速度
+    private final int minSwipeDistance = 100;      //最小识别位移(px)
+    private float mDownX;
+    private float mDownY;
 
     public LiveNewController(@NotNull Context context) {
         super(context);
@@ -64,25 +65,37 @@ public class LiveNewController extends BaseController {
     }
 
     @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        float dx = e2.getX() - e1.getX();
-        float dy = e2.getY() - e1.getY();
-        if (Math.abs(dx) > Math.abs(dy)) {
-            // 横向滑动:切换线路
-            if (dx > minFlingDistance && Math.abs(velocityX) > minFlingVelocity) {
-                listener.changeSource(1);           //右滑
-            } else if (dx < -minFlingDistance && Math.abs(velocityX) > minFlingVelocity) {
-                listener.changeSource(-1);          //左滑
-            }
-        } else {
-            // 竖向滑动:切换频道(上滑下一台,下滑上一台)
-            if (dy < -minFlingDistance && Math.abs(velocityY) > minFlingVelocity) {
-                listener.changeChannel(1);
-            } else if (dy > minFlingDistance && Math.abs(velocityY) > minFlingVelocity) {
-                listener.changeChannel(-1);
+    public boolean onDown(MotionEvent e) {
+        mDownX = e.getX();
+        mDownY = e.getY();
+        return super.onDown(e);
+    }
+
+    /**
+     * 抬手时按位移判定换台/换源:GestureDetector 的 fling 依赖速度估计,
+     * 慢速滑动会被漏判,直播又没有其它竖向手势,故位移过阈值即触发
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        boolean handled = super.onTouchEvent(event);
+        if (event.getActionMasked() == MotionEvent.ACTION_UP && listener != null) {
+            float dx = event.getX() - mDownX;
+            float dy = event.getY() - mDownY;
+            if (Math.abs(dy) > Math.abs(dx)) {
+                if (dy < -minSwipeDistance) {
+                    listener.changeChannel(1);
+                } else if (dy > minSwipeDistance) {
+                    listener.changeChannel(-1);
+                }
+            } else {
+                if (dx > minSwipeDistance) {
+                    listener.changeSource(1);
+                } else if (dx < -minSwipeDistance) {
+                    listener.changeSource(-1);
+                }
             }
         }
-        return false;
+        return handled;
     }
 
     @Override

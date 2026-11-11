@@ -290,7 +290,7 @@ public class LiveActivity extends BaseActivity {
                 currentLiveChannelItem.getChannelName(), currentLiveChannelItem.getSourceName(),
                 currentLiveChannelItem.getSourceIndex() + 1, currentLiveChannelItem.getSourceNum()));
 
-        FrameLayout.LayoutParams lParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         if (tvRightSettingLayout.getVisibility() == View.VISIBLE) {
             lParams.gravity = Gravity.LEFT;
             lParams.leftMargin = 60;
@@ -327,6 +327,13 @@ public class LiveActivity extends BaseActivity {
             currentLiveChannelItem = getLiveChannels(currentChannelGroupIndex).get(currentLiveChannelIndex);
             Hawk.put(HawkConfig.LIVE_CHANNEL, currentLiveChannelItem.getChannelName());
             livePlayerManager.getLiveChannelPlayer(mVideoView, currentLiveChannelItem.getChannelName());
+            //手势/超时换台可能跨分组,同步左侧列表选中态,避免高亮停留在旧频道
+            if (liveChannelGroupAdapter.getSelectedGroupIndex() != currentChannelGroupIndex) {
+                liveChannelGroupAdapter.setSelectedGroupIndex(currentChannelGroupIndex);
+                liveChannelItemAdapter.setNewData(getLiveChannels(currentChannelGroupIndex));
+            }
+            liveChannelItemAdapter.setSelectedChannelIndex(currentLiveChannelIndex);
+            mLiveChannelView.smoothScrollToPosition(currentLiveChannelIndex);
         }
 
         channel_Name = currentLiveChannelItem;
@@ -340,7 +347,7 @@ public class LiveActivity extends BaseActivity {
         showBottomEpg();
 
         mVideoView.setUrl(currentLiveChannelItem.getUrl());
-       // showChannelInfo();
+        showChannelInfo();
         mVideoView.start();
         return true;
     }
